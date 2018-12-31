@@ -22,6 +22,8 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.2125
 
 [node name="Tank" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.22661, 0 )
+input_capture_on_drag = true
+collision/safe_margin = 0.05
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.722655, 0.691209, 0, -0.691209, 0.722655, -0.0432968, 14.9788, 13.2194 )

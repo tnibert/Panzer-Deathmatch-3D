@@ -11,7 +11,10 @@ public class Tank : KinematicBody
 	private MeshInstance gun;
 	
 	private Vector3 direction = new Vector3();
+	private Vector3 rotation = new Vector3(0, 0, 0);
 	private int speed = 200;
+	private float rotdeg = 0;
+	private float rotrad = 0;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -41,28 +44,58 @@ public class Tank : KinematicBody
 //  }
 	public override void _PhysicsProcess(float delta)
 	{
+		GD.Print(Transform);
+		Vector3 vel = new Vector3(0, 0, 0);
 		//GD.Print("in physics process");
 		direction = new Vector3(0, 0, 0);
+		rotrad = 0;
 		
 		if(Input.IsActionPressed("ui_left"))
 		{
+			// todo: create rotspeed variable
+			// todo: rotate around center of tank
+			rotrad -= (float)0.3 * delta;
+			//Rotate(Vector3.Left, Mathf.Pi);
 			direction.x -= 1;
 		}
 		// repeat for other directions
 		if(Input.IsActionPressed("ui_right"))
 		{
+			rotrad += (float)0.3 * delta;
+			//Rotate(Vector3.Right, Mathf.Pi);
 			direction.x += 1;
 		}
 		if(Input.IsActionPressed("ui_up"))
 		{
 			direction.z -= 1;
+			//direction = new Vector3((float) Math.Cos(rotation.y), 0, (float) Math.Sin(rotation.y));
+			//vel = new Vector3(0, 1, 0).Rotated(new Vector3(0,0,1), rotrad * Mathf.Pi) * speed * delta;
+			vel = GetTransform().basis.z;
 		}
 		if(Input.IsActionPressed("ui_down"))
 		{
 			direction.z += 1;
 		}
+		GD.Print(rotation);
+		GD.Print(direction);
+		GD.Print("------");
+		
+		RotateY(rotrad);
+		
 		direction = direction.Normalized();
 		direction = direction * speed * delta;
-		MoveAndSlide(direction, new Vector3(0, 1, 0));
+		//SetRotation(rotation);
+		/*
+		To move in a direction based on rotation -
+		 - y (up/down) of the vector must be 0
+		 - z is backward forward
+		 - x is left right
+		new Vector2((float)Math.Cos(radians), (float)Math.Sin(radians))
+		^ inadequate
+		https://docs.godotengine.org/en/3.0/tutorials/3d/using_transforms.html
+		*/
+		//LinearVelocity = Transform.basis.z * speed;
+		vel = vel.Normalized();
+		MoveAndSlide(vel, new Vector3(0, 1, 0));
 	}
 }
