@@ -24,6 +24,7 @@ N.Dot(point) - D;
 plane.DistanceTo(point);
 ^ the same, distance from plane to point.  D is distance from origin to plane, N is plane.
 
+todo: learn more about quaternions
 
 */
 
@@ -33,7 +34,7 @@ public class Tank : KinematicBody
 	private MeshInstance trackleft;
 	private MeshInstance trackright;
 	private MeshInstance body;
-	private MeshInstance turret;
+	private KinematicBody turret;
 	private MeshInstance gun;
 	
 	private Vector3 direction = new Vector3();
@@ -47,12 +48,12 @@ public class Tank : KinematicBody
         trackleft = (MeshInstance) GetNode("TrackLeft");
 		trackright = (MeshInstance) GetNode("TrackRight");
 		body = (MeshInstance) GetNode("Body");
-		turret = (MeshInstance) GetNode("Turret");
-		gun = (MeshInstance) GetNode("Turret/Gun");
+		turret = (KinematicBody) GetNode("Turret");
+		gun = (MeshInstance) GetNode("Turret/TurretMesh/Gun");
 		
 		Color tankcolor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 		
-		foreach(MeshInstance mesh in new MeshInstance[] {trackleft, trackright, body, turret, gun})
+		foreach(MeshInstance mesh in new MeshInstance[] {trackleft, trackright, body, (MeshInstance) GetNode("Turret/TurretMesh"), gun})
 		{
 			SpatialMaterial mat = (SpatialMaterial) mesh.GetSurfaceMaterial(0);
 			mat.AlbedoColor = tankcolor;
@@ -77,8 +78,6 @@ public class Tank : KinematicBody
 		
 		if(Input.IsActionPressed("ui_left"))
 		{
-			// todo: create rotspeed variable
-			// todo: rotate around center of tank
 			rotrad -= rotspeed * delta;
 			//Rotate(Vector3.Left, Mathf.Pi);
 		}
@@ -141,7 +140,12 @@ public class Tank : KinematicBody
 	
 	private void RotateTurret(float rot)
 	{
-		GD.Print("Rotating Turret");
+		/*
+		To do turret rotation vertically, we will likely need to use quaternion here
+		*/
+		
+		//GD.Print("Rotating Turret");
+		turret.RotateY(rot);
 	}
 	
 	private void Fire()

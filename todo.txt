@@ -1,4 +1,7 @@
 - tank collision
 - bullet firing
-- tank turret rotation
+- tank turret rotation vertical
 - network multiplayer
+- third person camera
+- first person camera
+- camera swap
