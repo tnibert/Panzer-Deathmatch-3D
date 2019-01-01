@@ -11,9 +11,8 @@ public class Tank : KinematicBody
 	private MeshInstance gun;
 	
 	private Vector3 direction = new Vector3();
-	private Vector3 rotation = new Vector3(0, 0, 0);
 	private int speed = 200;
-	private float rotdeg = 0;
+	private float rotspeed = 0.7f;
 	private float rotrad = 0;
 
     // Called when the node enters the scene tree for the first time.
@@ -37,15 +36,15 @@ public class Tank : KinematicBody
 		GD.Print("end ready");
     }
 
-//  // Called every frame. 'delta' is the elapsed time since the previous frame.
-//  public override void _Process(float delta)
-//  {
-//      
-//  }
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    /*public override void _Process(float delta)
+    {
+      
+    }*/
+
 	public override void _PhysicsProcess(float delta)
 	{
 		GD.Print(Transform);
-		Vector3 vel = new Vector3(0, 0, 0);
 		//GD.Print("in physics process");
 		direction = new Vector3(0, 0, 0);
 		rotrad = 0;
@@ -54,29 +53,26 @@ public class Tank : KinematicBody
 		{
 			// todo: create rotspeed variable
 			// todo: rotate around center of tank
-			rotrad -= (float)0.3 * delta;
+			rotrad -= rotspeed * delta;
 			//Rotate(Vector3.Left, Mathf.Pi);
-			direction.x -= 1;
 		}
 		// repeat for other directions
 		if(Input.IsActionPressed("ui_right"))
 		{
-			rotrad += (float)0.3 * delta;
+			rotrad += rotspeed * delta;
 			//Rotate(Vector3.Right, Mathf.Pi);
-			direction.x += 1;
 		}
 		if(Input.IsActionPressed("ui_up"))
 		{
-			direction.z -= 1;
 			//direction = new Vector3((float) Math.Cos(rotation.y), 0, (float) Math.Sin(rotation.y));
 			//vel = new Vector3(0, 1, 0).Rotated(new Vector3(0,0,1), rotrad * Mathf.Pi) * speed * delta;
-			vel = GetTransform().basis.z;
+			direction = GetTransform().basis.z;
 		}
 		if(Input.IsActionPressed("ui_down"))
 		{
-			direction.z += 1;
+			direction = -1 * GetTransform().basis.z;
 		}
-		GD.Print(rotation);
+		
 		GD.Print(direction);
 		GD.Print("------");
 		
@@ -95,7 +91,13 @@ public class Tank : KinematicBody
 		https://docs.godotengine.org/en/3.0/tutorials/3d/using_transforms.html
 		*/
 		//LinearVelocity = Transform.basis.z * speed;
-		vel = vel.Normalized();
-		MoveAndSlide(vel, new Vector3(0, 1, 0));
+		
+		/*
+		Velocity measures the change in position per unit of time.
+		The new position is found by adding velocity to the previous position.
+		*/
+		
+		//vel = vel.Normalized();
+		MoveAndSlide(direction, new Vector3(0, 1, 0));
 	}
 }
