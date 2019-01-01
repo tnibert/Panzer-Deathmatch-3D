@@ -2,10 +2,16 @@ using Godot;
 using System;
 
 /*
+Code links:
+http://gameprogrammingpatterns.com/observer.html
+
 Math links:
 https://docs.godotengine.org/en/3.0/tutorials/math/vector_math.html#doc-vector-math
 https://docs.godotengine.org/en/3.0/tutorials/math/vectors_advanced.html#doc-vectors-advanced
 https://docs.godotengine.org/en/3.0/tutorials/math/matrices_and_transforms.html
+https://docs.godotengine.org/en/3.0/tutorials/3d/using_transforms.html
+https://www.khanacademy.org/math/linear-algebra
+https://www.mathsisfun.com/algebra/vectors-dot-product.html
 
 unit vectors == direction vectors == normals
 
@@ -105,12 +111,12 @@ public class Tank : KinematicBody
 		{
 			RotateTurret(rotspeed * delta);
 		}
-		if(Input.IsActionPressed("ui_select"))
+		// Only true on frame that space was pressed
+		if(Input.IsActionJustPressed("ui_select"))
 		{
-			// looks like we will have to lock this somehow, input is very sensitive
 			Fire();
 		}
-		
+		//GD.Print(delta);
 		//GD.Print(direction);
 		//GD.Print("------");
 		
