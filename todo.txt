@@ -1,4 +1,4 @@
-- tank collision
+- make collision with walls more realistic
 - bullet firing
 - tank turret rotation vertical
 - network multiplayer
