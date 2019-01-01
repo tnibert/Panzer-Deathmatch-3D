@@ -1,6 +1,32 @@
 using Godot;
 using System;
 
+/*
+Math links:
+https://docs.godotengine.org/en/3.0/tutorials/math/vector_math.html#doc-vector-math
+https://docs.godotengine.org/en/3.0/tutorials/math/vectors_advanced.html#doc-vectors-advanced
+https://docs.godotengine.org/en/3.0/tutorials/math/matrices_and_transforms.html
+
+unit vectors == direction vectors == normals
+
+dot product tells you if a vector is more, less, or equal to 90 degrees
+	- can be used to determine if one entity is facing another
+todo: research cross product more - perpendicular vector between two vectors
+
+Unit normal vectors (often abbreviated normals):
+"Unit vectors that are perpendicular to a surface (so, they describe the orientation of the surface)"
+
+The dot product between a unit vector and any point in space returns the distance from the point to the plane.
+If it is below the plane, value will be negative, can determine side of plane point is on.
+
+Planes have polarity (switch polarity by * -1, operator '-' implemented in godot).  Godot has a Plane type.
+N.Dot(point) - D; 
+plane.DistanceTo(point);
+^ the same, distance from plane to point.  D is distance from origin to plane, N is plane.
+
+
+*/
+
 public class Tank : KinematicBody
 {
 	// Keep references to our children, might be best to structure later
@@ -44,7 +70,7 @@ public class Tank : KinematicBody
 
 	public override void _PhysicsProcess(float delta)
 	{
-		GD.Print(Transform);
+		//GD.Print(Transform);
 		//GD.Print("in physics process");
 		direction = new Vector3(0, 0, 0);
 		rotrad = 0;
@@ -72,9 +98,22 @@ public class Tank : KinematicBody
 		{
 			direction = -1 * GetTransform().basis.z;
 		}
+		if(Input.IsActionPressed("tur_left"))
+		{
+			RotateTurret(-1 * rotspeed * delta);
+		}
+		if(Input.IsActionPressed("tur_right"))
+		{
+			RotateTurret(rotspeed * delta);
+		}
+		if(Input.IsActionPressed("ui_select"))
+		{
+			// looks like we will have to lock this somehow, input is very sensitive
+			Fire();
+		}
 		
-		GD.Print(direction);
-		GD.Print("------");
+		//GD.Print(direction);
+		//GD.Print("------");
 		
 		RotateY(rotrad);
 		
@@ -97,7 +136,17 @@ public class Tank : KinematicBody
 		The new position is found by adding velocity to the previous position.
 		*/
 		
-		//vel = vel.Normalized();
 		MoveAndSlide(direction, new Vector3(0, 1, 0));
+	}
+	
+	private void RotateTurret(float rot)
+	{
+		GD.Print("Rotating Turret");
+	}
+	
+	private void Fire()
+	{
+		GD.Print("Fire");
+		// instantiate bullet
 	}
 }
