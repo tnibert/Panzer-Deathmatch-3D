@@ -1,7 +1,10 @@
 - make collision with walls more realistic
+- tile floor texture
 - bullet firing
 - tank turret rotation vertical
 - network multiplayer
 - third person camera
 - first person camera
 - camera swap
+- add a skydome
+- improve the game map
