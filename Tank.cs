@@ -45,9 +45,11 @@ public class Tank : KinematicBody
 	private PackedScene bulletscene;
 	
 	private Vector3 direction = new Vector3();
-	private int speed = 200;
+	private int speed = 200;			// will be multiplied by delta
+	private int bulletspeed = 10;
 	private float rotspeed = 0.7f;
 	private float rotrad = 0;
+	protected int health = 6;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -170,6 +172,7 @@ public class Tank : KinematicBody
 		
 		// set position and velocity
 		bullet.SetTranslation(spawnpos);
+		bullet.SetLinearVelocity(turret.GetGlobalTransform().basis.z * bulletspeed);
 		
 		// add to scene
 		GetParent().AddChild(bullet);

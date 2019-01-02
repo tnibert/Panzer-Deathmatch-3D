@@ -1,6 +1,5 @@
 - make collision with walls more realistic (no sliding)
 - tile floor texture
-- bullet velocity
 - tank turret rotation vertical
 - network multiplayer
 - third person camera
@@ -8,3 +7,5 @@
 - camera swap
 - add a skydome
 - improve the game map
+- destroy bullet after timeframe
+- bullet collision - destroy bullet, if hit tank deduct health
