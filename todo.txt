@@ -1,6 +1,6 @@
-- make collision with walls more realistic
+- make collision with walls more realistic (no sliding)
 - tile floor texture
-- bullet firing
+- bullet velocity
 - tank turret rotation vertical
 - network multiplayer
 - third person camera

@@ -42,6 +42,7 @@ public class Tank : KinematicBody
 	private MeshInstance body;
 	private KinematicBody turret;
 	private MeshInstance gun;
+	private PackedScene bulletscene;
 	
 	private Vector3 direction = new Vector3();
 	private int speed = 200;
@@ -51,14 +52,18 @@ public class Tank : KinematicBody
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+		// Get references to parts of tanks
         trackleft = (MeshInstance) GetNode("TrackLeft");
 		trackright = (MeshInstance) GetNode("TrackRight");
 		body = (MeshInstance) GetNode("Body");
 		turret = (KinematicBody) GetNode("Turret");
 		gun = (MeshInstance) GetNode("Turret/TurretMesh/Gun");
 		
-		Color tankcolor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+		// Load bullet scene
+		bulletscene = ResourceLoader.Load("res://Bullet.tscn") as Godot.PackedScene;
 		
+		// Set a color for the tank
+		Color tankcolor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 		foreach(MeshInstance mesh in new MeshInstance[] {trackleft, trackright, body, (MeshInstance) GetNode("Turret/TurretMesh"), gun})
 		{
 			SpatialMaterial mat = (SpatialMaterial) mesh.GetSurfaceMaterial(0);
@@ -157,6 +162,17 @@ public class Tank : KinematicBody
 	private void Fire()
 	{
 		GD.Print("Fire");
+		
 		// instantiate bullet
+		RigidBody bullet = (RigidBody) bulletscene.Instance();
+		Spatial spawnpoint = (Spatial) GetNode("Turret/TurretMesh/Gun/BulletSpawn");
+		Vector3 spawnpos = spawnpoint.GetGlobalTransform().origin;		//.GetTranslation() for local space
+		
+		// set position and velocity
+		bullet.SetTranslation(spawnpos);
+		
+		// add to scene
+		GetParent().AddChild(bullet);
+		bullet.Show();
 	}
 }

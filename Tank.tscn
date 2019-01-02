@@ -65,6 +65,9 @@ transform = Transform( 0.360896, 0, 0, 0, -1.10981e-08, -0.253894, 0, 0.869039, 
 mesh = SubResource( 8 )
 material/0 = SubResource( 9 )
 
+[node name="BulletSpawn" type="Spatial" parent="Turret/TurretMesh/Gun"]
+transform = Transform( 1, 0, 0, 0, 1, 1.06581e-14, 0, 3.55271e-15, 1, 0, 1.42203, 0 )
+
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884948, -0.0381331 )
 shape = SubResource( 10 )
