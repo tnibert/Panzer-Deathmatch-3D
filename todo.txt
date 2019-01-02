@@ -7,7 +7,6 @@
 - camera swap
 - add a skydome
 - improve the game map
-- destroy bullet after timeframe
 - bullet collision - destroy bullet, if hit tank deduct health
 - automate build on travis-ci: https://docs.godotengine.org/en/3.0/getting_started/workflow/export/exporting_projects.html#export-from-command-line
   - https://www.reddit.com/r/godot/comments/89cu19/exporting_and_publishing_your_games_automagically/
