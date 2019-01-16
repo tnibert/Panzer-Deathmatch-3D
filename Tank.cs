@@ -148,7 +148,8 @@ public class Tank : KinematicBody
 		The new position is found by adding velocity to the previous position.
 		*/
 		
-		MoveAndSlide(direction, new Vector3(0, 1, 0));
+		// the true should be stop_on_slope, but it doesn't appear to be working?
+		MoveAndSlide(direction, new Vector3(0, 1, 0), true);
 	}
 	
 	private void RotateTurret(float rot)
