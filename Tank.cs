@@ -90,6 +90,7 @@ public class Tank : KinematicBody
 		//GD.Print("in physics process");
 		direction = new Vector3(0, 0, 0);
 		rotrad = 0;
+		float TurretRot = 0;
 		bool change = false;
 		
 		if(IsNetworkMaster())
@@ -121,11 +122,13 @@ public class Tank : KinematicBody
 			}
 			if(Input.IsActionPressed("tur_left"))
 			{
-				RotateTurret(-1 * rotspeed * delta);
+				TurretRot = -1 * rotspeed * delta;
+				change = true;
 			}
 			if(Input.IsActionPressed("tur_right"))
 			{
-				RotateTurret(rotspeed * delta);
+				TurretRot = rotspeed * delta;
+				change = true;
 			}
 			// Only true on frame that space was pressed
 			if(Input.IsActionJustPressed("ui_select"))
@@ -160,25 +163,31 @@ public class Tank : KinematicBody
 		{
 			// announce movement
 			// todo: we should only send this is there is a change in position
-			RpcUnreliable("SetPosAndRot", direction, rotrad);
+			RpcUnreliable("NetSetPosAndRot", direction, rotrad, TurretRot);
 		
-			// Do the actual tranformations
-			RotateY(rotrad);
-			// the true should be stop_on_slope, but it doesn't appear to be working?
-			MoveAndSlide(direction, new Vector3(0, 1, 0), true);
+			LocSetPosAndRot(direction, rotrad, TurretRot);
 		}
 		
 		// we don't need this, cause out of scope after, but I like being explicit for sanity, blame biomed
 		change = false;
 	}
 	
+	private void LocSetPosAndRot(Vector3 dir, float bodyrot, float turrot)
+	{
+		/*
+		Do the transformations to the player
+		*/
+		RotateY(bodyrot);
+		RotateTurret(turrot);
+		MoveAndSlide(dir, new Vector3(0, 1, 0), true);
+	}
+	
 	[Remote]
-	private void SetPosAndRot(Vector3 dir, float rot)
+	private void NetSetPosAndRot(Vector3 dir, float bodyrot, float turrot)
 	{
 		// todo: server player is laggy
 		GD.Print(GetTree().GetNetworkUniqueId().ToString());
-		RotateY(rot);
-		MoveAndSlide(dir, new Vector3(0, 1, 0), true);
+		LocSetPosAndRot(dir, bodyrot, turrot);
 	}
 	
 	private void RotateTurret(float rot)

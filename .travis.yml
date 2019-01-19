@@ -10,6 +10,7 @@ before_install:
 install:
     - mkdir -p ~/.local/share/godot/templates/3.1.beta1.mono/
     - cp -r templates/* ~/.local/share/godot/templates/3.1.beta1.mono/
+    - setenv DISPLAY /dev/null
 
 script:
     - Godot_v3.1-beta1_mono_x11_64/Godot_v3.1-beta1_mono_x11.64 --export "Linux/X11" panzerdeathmatch3d-linux

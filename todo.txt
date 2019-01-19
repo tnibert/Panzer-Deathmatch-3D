@@ -1,13 +1,12 @@
 - make collision with walls more realistic (no sliding)
 - tile floor texture
 - tank turret rotation vertical
-- network multiplayer
 - third person camera
 - first person camera
 - camera swap
 - add a skydome
 - improve the game map
-- bullet collision - destroy bullet, if hit tank deduct health
-- automate build on travis-ci: https://docs.godotengine.org/en/3.0/getting_started/workflow/export/exporting_projects.html#export-from-command-line
-  - https://www.reddit.com/r/godot/comments/89cu19/exporting_and_publishing_your_games_automagically/
-  - https://github.com/GameDrivenDesign/docker-godot-export
+
+- bullet appear over network
+- networked bullet collision - server side, destroy bullet, if hit tank deduct health
+- complete automate build on travis-ci with no X
