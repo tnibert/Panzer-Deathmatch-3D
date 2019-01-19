@@ -133,6 +133,7 @@ public class Tank : KinematicBody
 			// Only true on frame that space was pressed
 			if(Input.IsActionJustPressed("ui_select"))
 			{
+				Rpc("NetFire");
 				Fire();
 			}
 		}
@@ -186,6 +187,8 @@ public class Tank : KinematicBody
 	private void NetSetPosAndRot(Vector3 dir, float bodyrot, float turrot)
 	{
 		// todo: server player is laggy
+		// todo: this approach can lead to data that is out of sync, because it is unreliable
+		//		 we need to periodically sync absolute positions
 		GD.Print(GetTree().GetNetworkUniqueId().ToString());
 		LocSetPosAndRot(dir, bodyrot, turrot);
 	}
@@ -202,7 +205,7 @@ public class Tank : KinematicBody
 	
 	private void Fire()
 	{
-		GD.Print("Fire");
+		//GD.Print("Fire");
 		
 		// instantiate bullet
 		RigidBody bullet = (RigidBody) bulletscene.Instance();
@@ -216,5 +219,11 @@ public class Tank : KinematicBody
 		// add to scene
 		GetParent().AddChild(bullet);
 		bullet.Show();
+	}
+	
+	[Remote]
+	private void NetFire()
+	{
+		Fire();
 	}
 }
