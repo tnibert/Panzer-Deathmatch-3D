@@ -32,6 +32,8 @@ plane.DistanceTo(point);
 
 todo: learn more about quaternions
 
+Use IsNetworkServer() to control collision detection
+
 */
 
 public class Tank : KinematicBody
@@ -88,46 +90,52 @@ public class Tank : KinematicBody
 		//GD.Print("in physics process");
 		direction = new Vector3(0, 0, 0);
 		rotrad = 0;
+		bool change = false;
 		
-		if(Input.IsActionPressed("ui_left"))
+		if(IsNetworkMaster())
 		{
-			rotrad -= rotspeed * delta;
-			//Rotate(Vector3.Left, Mathf.Pi);
-		}
-		// repeat for other directions
-		if(Input.IsActionPressed("ui_right"))
-		{
-			rotrad += rotspeed * delta;
-			//Rotate(Vector3.Right, Mathf.Pi);
-		}
-		if(Input.IsActionPressed("ui_up"))
-		{
-			//direction = new Vector3((float) Math.Cos(rotation.y), 0, (float) Math.Sin(rotation.y));
-			//vel = new Vector3(0, 1, 0).Rotated(new Vector3(0,0,1), rotrad * Mathf.Pi) * speed * delta;
-			direction = GetTransform().basis.z;
-		}
-		if(Input.IsActionPressed("ui_down"))
-		{
-			direction = -1 * GetTransform().basis.z;
-		}
-		if(Input.IsActionPressed("tur_left"))
-		{
-			RotateTurret(-1 * rotspeed * delta);
-		}
-		if(Input.IsActionPressed("tur_right"))
-		{
-			RotateTurret(rotspeed * delta);
-		}
-		// Only true on frame that space was pressed
-		if(Input.IsActionJustPressed("ui_select"))
-		{
-			Fire();
+			if(Input.IsActionPressed("ui_left"))
+			{
+				rotrad -= rotspeed * delta;
+				//Rotate(Vector3.Left, Mathf.Pi);
+				change = true;
+			}
+			// repeat for other directions
+			if(Input.IsActionPressed("ui_right"))
+			{
+				rotrad += rotspeed * delta;
+				//Rotate(Vector3.Right, Mathf.Pi);
+				change = true;
+			}
+			if(Input.IsActionPressed("ui_up"))
+			{
+				//direction = new Vector3((float) Math.Cos(rotation.y), 0, (float) Math.Sin(rotation.y));
+				//vel = new Vector3(0, 1, 0).Rotated(new Vector3(0,0,1), rotrad * Mathf.Pi) * speed * delta;
+				direction = GetTransform().basis.z;
+				change = true;
+			}
+			if(Input.IsActionPressed("ui_down"))
+			{
+				direction = -1 * GetTransform().basis.z;
+				change = true;
+			}
+			if(Input.IsActionPressed("tur_left"))
+			{
+				RotateTurret(-1 * rotspeed * delta);
+			}
+			if(Input.IsActionPressed("tur_right"))
+			{
+				RotateTurret(rotspeed * delta);
+			}
+			// Only true on frame that space was pressed
+			if(Input.IsActionJustPressed("ui_select"))
+			{
+				Fire();
+			}
 		}
 		//GD.Print(delta);
 		//GD.Print(direction);
-		//GD.Print("------");
-		
-		RotateY(rotrad);
+		//GD.Print("------");		
 		
 		direction = direction.Normalized();
 		direction = direction * speed * delta;
@@ -148,8 +156,29 @@ public class Tank : KinematicBody
 		The new position is found by adding velocity to the previous position.
 		*/
 		
-		// the true should be stop_on_slope, but it doesn't appear to be working?
-		MoveAndSlide(direction, new Vector3(0, 1, 0), true);
+		if(change)
+		{
+			// announce movement
+			// todo: we should only send this is there is a change in position
+			RpcUnreliable("SetPosAndRot", direction, rotrad);
+		
+			// Do the actual tranformations
+			RotateY(rotrad);
+			// the true should be stop_on_slope, but it doesn't appear to be working?
+			MoveAndSlide(direction, new Vector3(0, 1, 0), true);
+		}
+		
+		// we don't need this, cause out of scope after, but I like being explicit for sanity, blame biomed
+		change = false;
+	}
+	
+	[Remote]
+	private void SetPosAndRot(Vector3 dir, float rot)
+	{
+		// todo: server player is laggy
+		GD.Print(GetTree().GetNetworkUniqueId().ToString());
+		RotateY(rot);
+		MoveAndSlide(dir, new Vector3(0, 1, 0), true);
 	}
 	
 	private void RotateTurret(float rot)

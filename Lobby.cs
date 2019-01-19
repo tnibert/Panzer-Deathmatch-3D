@@ -7,11 +7,13 @@ public class Lobby : Node2D
     LineEdit hostip;
 	Button hostbutton;
 	Button joinbutton;
-	Globals globals = new Globals();
+	private Globals globals;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+		globals = (Globals)GetNode("/root/Globals");
+		
         hostip = (LineEdit) GetNode("IPaddressInput");
 		hostbutton = (Button) GetNode("HostButton");
 		joinbutton = (Button) GetNode("JoinButton");
