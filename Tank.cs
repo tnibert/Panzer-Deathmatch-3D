@@ -75,7 +75,7 @@ public class Tank : KinematicBody
 			mesh.SetSurfaceMaterial(0, mat);
 		}
 		SetProcess(true);
-		GD.Print("end ready");
+		//GD.Print("end ready");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -186,7 +186,7 @@ public class Tank : KinematicBody
 	private void NetSetTransforms(Transform bodytrans, Transform turrettrans)
 	{
 		/* syncs the transforms for the tank */
-		GD.Print(GetTree().GetNetworkUniqueId().ToString());
+		//GD.Print(GetTree().GetNetworkUniqueId().ToString());
 		
 		this.Transform = bodytrans;
 		turret.Transform = turrettrans;
