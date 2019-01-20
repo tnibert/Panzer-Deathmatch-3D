@@ -97,14 +97,14 @@ public class Tank : KinematicBody
 		{
 			if(Input.IsActionPressed("ui_left"))
 			{
-				rotrad -= rotspeed * delta;
+				rotrad += rotspeed * delta;
 				//Rotate(Vector3.Left, Mathf.Pi);
 				change = true;
 			}
 			// repeat for other directions
 			if(Input.IsActionPressed("ui_right"))
 			{
-				rotrad += rotspeed * delta;
+				rotrad -= rotspeed * delta;
 				//Rotate(Vector3.Right, Mathf.Pi);
 				change = true;
 			}
@@ -122,12 +122,12 @@ public class Tank : KinematicBody
 			}
 			if(Input.IsActionPressed("tur_left"))
 			{
-				TurretRot = -1 * rotspeed * delta;
+				TurretRot = rotspeed * delta;
 				change = true;
 			}
 			if(Input.IsActionPressed("tur_right"))
 			{
-				TurretRot = rotspeed * delta;
+				TurretRot = -1 * rotspeed * delta;
 				change = true;
 			}
 			// Only true on frame that space was pressed
@@ -162,11 +162,10 @@ public class Tank : KinematicBody
 		
 		if(change)
 		{
-			// announce movement
-			// todo: we should only send this is there is a change in position
-			RpcUnreliable("NetSetPosAndRot", direction, rotrad, TurretRot);
-		
 			LocSetPosAndRot(direction, rotrad, TurretRot);
+			
+			// announce movement
+			RpcUnreliable("NetSetTransforms", this.Transform, turret.Transform);
 		}
 		
 		// we don't need this, cause out of scope after, but I like being explicit for sanity, blame biomed
@@ -184,13 +183,13 @@ public class Tank : KinematicBody
 	}
 	
 	[Remote]
-	private void NetSetPosAndRot(Vector3 dir, float bodyrot, float turrot)
+	private void NetSetTransforms(Transform bodytrans, Transform turrettrans)
 	{
-		// todo: server player is laggy
-		// todo: this approach can lead to data that is out of sync, because it is unreliable
-		//		 we need to periodically sync absolute positions
+		/* syncs the transforms for the tank */
 		GD.Print(GetTree().GetNetworkUniqueId().ToString());
-		LocSetPosAndRot(dir, bodyrot, turrot);
+		
+		this.Transform = bodytrans;
+		turret.Transform = turrettrans;
 	}
 	
 	private void RotateTurret(float rot)
@@ -224,6 +223,10 @@ public class Tank : KinematicBody
 	[Remote]
 	private void NetFire()
 	{
+		/*
+		Physics engine does not produce same results across network
+		Make bullet kinematicbody?
+		*/
 		Fire();
 	}
 }

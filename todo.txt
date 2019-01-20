@@ -9,6 +9,5 @@
 - health bar
 
 - tank spawn points - make tanks appear before movement
-- periodic absolute tank position sync
 - networked bullet collision - server side, destroy bullet, if hit tank deduct health
 - complete automate build on travis-ci with no X
