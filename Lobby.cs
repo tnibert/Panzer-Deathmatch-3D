@@ -7,6 +7,7 @@ public class Lobby : Node2D
     LineEdit hostip;
 	Button hostbutton;
 	Button joinbutton;
+	Label label;
 	private Globals globals;
 
     // Called when the node enters the scene tree for the first time.
@@ -17,6 +18,7 @@ public class Lobby : Node2D
         hostip = (LineEdit) GetNode("IPaddressInput");
 		hostbutton = (Button) GetNode("HostButton");
 		joinbutton = (Button) GetNode("JoinButton");
+		label = (Label) GetNode("HostLabel");
 		
 		// connect the button "pressed" signal to StartGame() method
 		hostbutton.Connect("pressed", this, "HostGame");
@@ -30,13 +32,22 @@ public class Lobby : Node2D
 
     }*/
 	
+	private void HideAll()
+	{
+		joinbutton.Hide();
+		hostbutton.Hide();
+		hostip.Hide();
+	}
+	
 	private void JoinGame()
 	{
 		GD.Print("Joining network");
+		HideAll();
+		label.Text = "Joining Game";
+		
 		NetworkedMultiplayerENet host = new NetworkedMultiplayerENet();
 		host.CreateClient(hostip.Text, 4242);
 		GetTree().SetNetworkPeer(host);
-		joinbutton.Hide();
 	}
 	
 	private void HostGame()
@@ -49,8 +60,11 @@ public class Lobby : Node2D
 			GD.Print("ruh roh");
 			return;
 		}
-		hostbutton.Hide();
-		//startbutton.disabled = true;
+		
+		// update UI
+		HideAll();
+		label.Text = "Waiting for clients";
+		
 		GetTree().SetNetworkPeer(host);
 	}
 	
