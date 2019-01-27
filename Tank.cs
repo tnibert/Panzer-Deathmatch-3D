@@ -229,4 +229,15 @@ public class Tank : KinematicBody
 		*/
 		Fire();
 	}
+	
+	public int DecrementHealth()
+	{
+		health--;
+		if(health <= 0)
+		{
+			GD.Print("DEAD!");
+			// explode and reset
+		}
+		return health;
+	}
 }

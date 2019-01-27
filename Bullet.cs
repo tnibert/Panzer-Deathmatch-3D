@@ -35,6 +35,12 @@ public class Bullet : RigidBody
 	public void colliding(Node who)
 	{
 		GD.Print(this.GetName()," is colliding with ",who.GetName());
+		try {
+			((Tank)who).DecrementHealth();
+			GD.Print("Health decremented");
+		} catch {
+			GD.Print("could not decrement health");
+		}
 		this.QueueFree();
 	}
 }
