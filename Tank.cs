@@ -51,6 +51,7 @@ public class Tank : KinematicBody
 	private int bulletspeed = 10;
 	private float rotspeed = 0.7f;
 	private float rotrad = 0;
+	private Transform spawnpoint;
 	protected int health = 6;
 
     // Called when the node enters the scene tree for the first time.
@@ -75,7 +76,9 @@ public class Tank : KinematicBody
 			mesh.SetSurfaceMaterial(0, mat);
 		}
 		SetProcess(true);
-		//GD.Print("end ready");
+		
+		// required to appear at spawn
+		MoveAndSlide(new Vector3(0, 0, 0), new Vector3(0, 1, 0), true);
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -237,7 +240,21 @@ public class Tank : KinematicBody
 		{
 			GD.Print("DEAD!");
 			// explode and reset
+			Respawn();
 		}
 		return health;
+	}
+	
+	public void SetRespawn()
+	{
+		// Set the respawn point to the current position
+		spawnpoint = GetTransform();
+	}
+	
+	private void Respawn()
+	{
+		this.Transform = spawnpoint;
+		// required to appear at spawn
+		MoveAndSlide(new Vector3(0, 0, 0), new Vector3(0, 1, 0), true);
 	}
 }

@@ -20,17 +20,30 @@ public class map : Spatial
         // instantiate the players
 		tankscene = ResourceLoader.Load("res://Tank.tscn") as Godot.PackedScene;
 		
-		KinematicBody localplayer = (KinematicBody) tankscene.Instance();
+		Tank localplayer = (Tank) tankscene.Instance();
 		localplayer.SetName(GetTree().GetNetworkUniqueId().ToString());
 		localplayer.SetNetworkMaster(GetTree().GetNetworkUniqueId());
 		
-		KinematicBody remoteplayer = (KinematicBody) tankscene.Instance();
+		Tank remoteplayer = (Tank) tankscene.Instance();
 		remoteplayer.SetName(globals.otherPlayerId.ToString());
 		remoteplayer.SetNetworkMaster(globals.otherPlayerId);
 		
+		Vector3 serverspawn = new Vector3(12, 0, 12);
+		Vector3 clientspawn = new Vector3(-12, 0, -12);
+		
+		// set spawn positions
+		if(GetTree().IsNetworkServer()) {
+			localplayer.Translate(serverspawn);
+			remoteplayer.Translate(clientspawn);
+		} else {
+			localplayer.Translate(clientspawn);
+			remoteplayer.Translate(serverspawn);
+		}
+		localplayer.SetRespawn();
+		remoteplayer.SetRespawn();
+		
 		AddChild(localplayer);
 		AddChild(remoteplayer);
-		
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
