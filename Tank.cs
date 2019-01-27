@@ -45,6 +45,7 @@ public class Tank : KinematicBody
 	private KinematicBody turret;
 	private MeshInstance gun;
 	private PackedScene bulletscene;
+	private Camera thirdpersoncamera;
 	
 	private Vector3 direction = new Vector3();
 	private int speed = 200;			// will be multiplied by delta
@@ -52,7 +53,8 @@ public class Tank : KinematicBody
 	private float rotspeed = 0.7f;
 	private float rotrad = 0;
 	private Transform spawnpoint;
-	protected int health = 6;
+	private int maxhealth = 6;
+	protected int health;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -63,6 +65,7 @@ public class Tank : KinematicBody
 		body = (MeshInstance) GetNode("Body");
 		turret = (KinematicBody) GetNode("Turret");
 		gun = (MeshInstance) GetNode("Turret/TurretMesh/Gun");
+		thirdpersoncamera = (Camera) GetNode("ThirdPersonCam");
 		
 		// Load bullet scene
 		bulletscene = ResourceLoader.Load("res://Bullet.tscn") as Godot.PackedScene;
@@ -75,6 +78,8 @@ public class Tank : KinematicBody
 			mat.AlbedoColor = tankcolor;
 			mesh.SetSurfaceMaterial(0, mat);
 		}
+		health = maxhealth;
+		
 		SetProcess(true);
 		
 		// required to appear at spawn
@@ -254,7 +259,14 @@ public class Tank : KinematicBody
 	private void Respawn()
 	{
 		this.Transform = spawnpoint;
+		health = maxhealth;
 		// required to appear at spawn
 		MoveAndSlide(new Vector3(0, 0, 0), new Vector3(0, 1, 0), true);
+	}
+	
+	public Camera SetActiveCam()
+	{
+		thirdpersoncamera.MakeCurrent();
+		return thirdpersoncamera;
 	}
 }

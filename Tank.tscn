@@ -72,3 +72,6 @@ transform = Transform( 1, 0, 0, 0, 1, 1.42109e-14, 0, 7.10543e-15, 1, 0, 2.00199
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884948, -0.0381331 )
 shape = SubResource( 10 )
 
+[node name="ThirdPersonCam" type="Camera" parent="."]
+transform = Transform( -1, 8.74228e-08, 0, 8.74228e-08, 1, -8.74228e-08, -7.64274e-15, -8.74228e-08, -1, 0, 1.56302, -5.16107 )
+

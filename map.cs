@@ -44,6 +44,8 @@ public class map : Spatial
 		
 		AddChild(localplayer);
 		AddChild(remoteplayer);
+		
+		localplayer.SetActiveCam();
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
