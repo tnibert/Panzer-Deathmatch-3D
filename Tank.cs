@@ -54,7 +54,7 @@ public class Tank : KinematicBody
 	private int speed = 200;			// will be multiplied by delta
 	private int bulletspeed = 10;
 	private float rotspeed = 0.7f;
-	private float turretrotspeed = 0.4f;
+	private float turretrotspeed = 0.2f;
 	private float rotrad = 0;
 	
 	private Transform spawnpoint;
@@ -167,7 +167,19 @@ public class Tank : KinematicBody
 				TurretRot = turretrotspeed * delta * difference.x;
 				
 				change = true;
-				//GD.Print(difference);
+				
+				// wrap mouse around if at edge of viewport
+				//int offset = 10;
+				if(currentmousepos.x >= GetViewport().GetSize().x-1)
+				{
+					Input.WarpMousePosition(new Vector2(1, currentmousepos.y));
+					currentmousepos = GetViewport().GetMousePosition();
+				}
+				else if(currentmousepos.x <= 0)
+				{
+					Input.WarpMousePosition(new Vector2(GetViewport().GetSize().x-1, currentmousepos.y));
+					currentmousepos = GetViewport().GetMousePosition();
+				}
 			}
 			
 			if(Input.IsActionJustPressed("ui_cancel"))
