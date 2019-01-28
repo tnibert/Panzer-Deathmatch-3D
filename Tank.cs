@@ -46,6 +46,7 @@ public class Tank : KinematicBody
 	private MeshInstance gun;
 	private PackedScene bulletscene;
 	private Camera thirdpersoncamera;
+	private Camera firstpersoncamera;
 	
 	private Vector3 direction = new Vector3();
 	private int speed = 200;			// will be multiplied by delta
@@ -55,6 +56,7 @@ public class Tank : KinematicBody
 	private Transform spawnpoint;
 	private int maxhealth = 6;
 	protected int health;
+	private bool firstperson = false;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -65,7 +67,9 @@ public class Tank : KinematicBody
 		body = (MeshInstance) GetNode("Body");
 		turret = (KinematicBody) GetNode("Turret");
 		gun = (MeshInstance) GetNode("Turret/TurretMesh/Gun");
+		
 		thirdpersoncamera = (Camera) GetNode("ThirdPersonCam");
+		firstpersoncamera = (Camera) GetNode("Turret/TurretMesh/Gun/BulletSpawn/Camera");
 		
 		// Load bullet scene
 		bulletscene = ResourceLoader.Load("res://Bullet.tscn") as Godot.PackedScene;
@@ -143,6 +147,10 @@ public class Tank : KinematicBody
 			{
 				Rpc("NetFire");
 				Fire();
+			}
+			if(Input.IsActionJustPressed("ui_accept"))
+			{
+				SwapCamera();
 			}
 		}
 		//GD.Print(delta);
@@ -267,6 +275,23 @@ public class Tank : KinematicBody
 	public Camera SetActiveCam()
 	{
 		thirdpersoncamera.MakeCurrent();
+		firstperson = false;
 		return thirdpersoncamera;
+	}
+	
+	private void SwapCamera()
+	{
+		/*
+		Switch between first person and third person cameras
+		*/
+		if(!firstperson)
+		{
+			firstpersoncamera.MakeCurrent();
+		}
+		else
+		{
+			thirdpersoncamera.MakeCurrent();
+		}
+		firstperson = !firstperson;
 	}
 }
