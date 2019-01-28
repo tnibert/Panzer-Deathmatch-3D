@@ -49,11 +49,14 @@ public class Tank : KinematicBody
 	private Camera firstpersoncamera;
 	
 	private Vector3 direction = new Vector3();
+	
+	// these speeds are calculated in with other variables, they are not equivalent
 	private int speed = 200;			// will be multiplied by delta
 	private int bulletspeed = 10;
 	private float rotspeed = 0.7f;
-	private float turretrotspeed = 1.5f;
+	private float turretrotspeed = 0.4f;
 	private float rotrad = 0;
+	
 	private Transform spawnpoint;
 	private int maxhealth = 6;
 	protected int health;
@@ -161,14 +164,7 @@ public class Tank : KinematicBody
 				Vector2 difference = currentmousepos - newmousepos;
 				currentmousepos = newmousepos;
 				
-				if(difference.x > 0)
-				{
-					TurretRot = turretrotspeed * delta;
-				}
-				else
-				{
-					TurretRot = -1 * turretrotspeed * delta;
-				}
+				TurretRot = turretrotspeed * delta * difference.x;
 				
 				change = true;
 				//GD.Print(difference);

@@ -3,6 +3,8 @@
 - tank turret rotation vertical
 - tank turret controlled by mouse
     - add full range of turret motion when mouse is captured
+    - file bug report about capture mode
+    - mouse automatic wrap around
 - improve the game map - terrain
 - health bar
 - explosion on bullet impact

@@ -61,7 +61,7 @@ mesh = SubResource( 6 )
 material/0 = SubResource( 7 )
 
 [node name="Gun" type="MeshInstance" parent="Turret/TurretMesh"]
-transform = Transform( 0.360896, 0, 0, 0, -1.10981e-08, -0.253894, 0, 0.869039, -3.79869e-08, 0, 0.359651, 1.412 )
+transform = Transform( 0.361, 0, 0, 0, -4.37114e-08, -0.254, 0, 1, -1.11027e-08, 0, 0.359651, 1.412 )
 mesh = SubResource( 8 )
 material/0 = SubResource( 9 )
 
@@ -69,7 +69,7 @@ material/0 = SubResource( 9 )
 transform = Transform( 1, 0, 0, 0, 1, 1.42109e-14, 0, 7.10543e-15, 1, 0, 2.00199, 0 )
 
 [node name="Camera" type="Camera" parent="Turret/TurretMesh/Gun/BulletSpawn"]
-transform = Transform( -1, 8.74228e-08, 0, 3.82137e-15, 4.37114e-08, -1, -8.74228e-08, -1, -4.37114e-08, 0, 0, 0 )
+transform = Transform( -4.61681, 2.83983e-07, 7.06925e-20, 1.76425e-14, 2.8682e-07, -1.66667, -4.03614e-07, -6.56168, -1.12921e-06, 0, -3.71651, -3.2276 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1.9619, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884948, -0.0381331 )
