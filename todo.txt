@@ -1,10 +1,16 @@
 - make collision with walls more realistic (no sliding)
 - tile floor texture
 - tank turret rotation vertical
-- third person camera
-- first person camera
-- camera swap
-- add a skydome
-- improve the game map
+- tank turret controlled by mouse
+    - add full range of turret motion when mouse is captured
+- improve the game map - terrain
 - health bar
+- explosion on bullet impact
+- tank explosion on death
 - complete automate build on travis-ci with no X
+
+- sound effects
+    - tank fire
+    - tank drive
+    - tank explosion
+    - background music (something trip hoppy - https://www.youtube.com/watch?v=QoL4NHBpal4)

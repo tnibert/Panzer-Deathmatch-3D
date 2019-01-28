@@ -52,11 +52,19 @@ public class Tank : KinematicBody
 	private int speed = 200;			// will be multiplied by delta
 	private int bulletspeed = 10;
 	private float rotspeed = 0.7f;
+	private float turretrotspeed = 1.5f;
 	private float rotrad = 0;
 	private Transform spawnpoint;
 	private int maxhealth = 6;
 	protected int health;
 	private bool firstperson = false;
+	
+	private Vector2 currentmousepos = new Vector2();
+	
+	const Input.MouseMode MOUSE_MODE_CONFINED = (Input.MouseMode) 3;
+	const Input.MouseMode MOUSE_MODE_CAPTURED = (Input.MouseMode) 2;
+	const Input.MouseMode MOUSE_MODE_HIDDEN = (Input.MouseMode) 1;
+	const Input.MouseMode MOUSE_MODE_VISIBLE = (Input.MouseMode) 0;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -83,6 +91,8 @@ public class Tank : KinematicBody
 			mesh.SetSurfaceMaterial(0, mat);
 		}
 		health = maxhealth;
+		
+		Input.SetMouseMode(MOUSE_MODE_CONFINED);
 		
 		SetProcess(true);
 		
@@ -132,25 +142,48 @@ public class Tank : KinematicBody
 				direction = -1 * GetTransform().basis.z;
 				change = true;
 			}
-			if(Input.IsActionPressed("tur_left"))
-			{
-				TurretRot = rotspeed * delta;
-				change = true;
-			}
-			if(Input.IsActionPressed("tur_right"))
-			{
-				TurretRot = -1 * rotspeed * delta;
-				change = true;
-			}
-			// Only true on frame that space was pressed
-			if(Input.IsActionJustPressed("ui_select"))
+
+			// Only true on frame that mouse was pressed
+			if(Input.IsActionJustPressed("left_mouse"))
 			{
 				Rpc("NetFire");
 				Fire();
 			}
-			if(Input.IsActionJustPressed("ui_accept"))
+			if(Input.IsActionJustPressed("right_mouse"))
 			{
 				SwapCamera();
+			}
+			
+			// handle mouse movement
+			Vector2 newmousepos = GetViewport().GetMousePosition();
+			if(newmousepos != currentmousepos)
+			{
+				Vector2 difference = currentmousepos - newmousepos;
+				currentmousepos = newmousepos;
+				
+				if(difference.x > 0)
+				{
+					TurretRot = turretrotspeed * delta;
+				}
+				else
+				{
+					TurretRot = -1 * turretrotspeed * delta;
+				}
+				
+				change = true;
+				//GD.Print(difference);
+			}
+			
+			if(Input.IsActionJustPressed("ui_cancel"))
+			{
+				if(Input.GetMouseMode() == MOUSE_MODE_CONFINED)
+				{
+					Input.SetMouseMode(MOUSE_MODE_VISIBLE);
+				}
+				else
+				{
+					Input.SetMouseMode(MOUSE_MODE_CONFINED);
+				}
 			}
 		}
 		//GD.Print(delta);
@@ -188,6 +221,17 @@ public class Tank : KinematicBody
 		change = false;
 	}
 	
+	/*public override void _Input(InputEvent @event)
+	{
+		// This is kind of a hack to get our mouse to direct our turret rotation
+	    // Relative mouse position
+	    if (@event is InputEventMouseMotion eventMouseMotion)
+	        GD.Print("Mouse Motion at: ", eventMouseMotion.GetRelative());
+	
+	    // Print the size of the viewport
+	    //GD.Print("Viewport Resolution is: ", GetViewPortRect().Size);
+	}*/
+	
 	private void LocSetPosAndRot(Vector3 dir, float bodyrot, float turrot)
 	{
 		/*
@@ -224,8 +268,8 @@ public class Tank : KinematicBody
 		
 		// instantiate bullet
 		RigidBody bullet = (RigidBody) bulletscene.Instance();
-		Spatial spawnpoint = (Spatial) GetNode("Turret/TurretMesh/Gun/BulletSpawn");
-		Vector3 spawnpos = spawnpoint.GetGlobalTransform().origin;		//.GetTranslation() for local space
+		Spatial bulletspawnpoint = (Spatial) GetNode("Turret/TurretMesh/Gun/BulletSpawn");
+		Vector3 spawnpos = bulletspawnpoint.GetGlobalTransform().origin;		//.GetTranslation() for local space
 		
 		// set position and velocity
 		bullet.SetTranslation(spawnpos);
@@ -251,7 +295,7 @@ public class Tank : KinematicBody
 		health--;
 		if(health <= 0)
 		{
-			GD.Print("DEAD!");
+			//GD.Print("DEAD!");
 			// explode and reset
 			Respawn();
 		}
