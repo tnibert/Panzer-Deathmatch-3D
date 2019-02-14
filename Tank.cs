@@ -56,6 +56,8 @@ public class Tank : KinematicBody
 	private float rotspeed = 0.7f;
 	private float turretrotspeed = 0.2f;
 	private float rotrad = 0;
+	private float pitch = 0;
+	private float yaw = 0;
 	
 	private Transform spawnpoint;
 	private int maxhealth = 6;
@@ -115,7 +117,7 @@ public class Tank : KinematicBody
 		//GD.Print("in physics process");
 		direction = new Vector3(0, 0, 0);
 		rotrad = 0;
-		float TurretRot = 0;
+		//float TurretRot = 0;
 		bool change = false;
 		
 		if(IsNetworkMaster())
@@ -158,13 +160,40 @@ public class Tank : KinematicBody
 			}
 			
 			// handle mouse movement
+			// example: https://github.com/Veraball/veraball/blob/master/data/scripts/game/ball.gd#L43-L52
+			/*
+			# Mouse look
+			# fmod() returns floating point remainder
+			func _input(event):
+				if event.type == InputEvent.MOUSE_MOTION and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+					yaw = fmod(yaw - event.relative_x * Game.view_sensitivity * 0.05, 360)
+					# Prevent yaw from becoming negative:
+					if yaw < 0:
+						yaw = 359.75
+					pitch = max(min(pitch - event.relative_y * Game.view_sensitivity * 0.05, 89), -89)
+					yaw_node.set_rotation(Vector3(0, deg2rad(yaw), 0))
+					pitch_node.set_rotation(Vector3(deg2rad(pitch), 0, 0))
+			*/
 			Vector2 newmousepos = GetViewport().GetMousePosition();
 			if(newmousepos != currentmousepos)
 			{
+				// difference is equivalent to (relative_x, relative_y)
 				Vector2 difference = currentmousepos - newmousepos;
 				currentmousepos = newmousepos;
 				
-				TurretRot = turretrotspeed * delta * difference.x;
+				//TurretRot = turretrotspeed * delta * difference.x;
+				yaw = ((yaw - (difference.x * delta)) % 360);
+				if(yaw < 0)
+				{
+					yaw = 359.75f;
+				}
+				
+				//GD.Print(yaw);
+				/*pitch = pitch - difference.y % 360;
+				if(pitch < 0)
+				{
+					pitch = 359.75f;
+				}*/
 				
 				change = true;
 				
@@ -219,7 +248,7 @@ public class Tank : KinematicBody
 		
 		if(change)
 		{
-			LocSetPosAndRot(direction, rotrad, TurretRot);
+			LocSetPosAndRot(direction, rotrad, deg2rad(yaw), deg2rad(pitch));
 			
 			// announce movement
 			RpcUnreliable("NetSetTransforms", this.Transform, turret.Transform);
@@ -240,13 +269,20 @@ public class Tank : KinematicBody
 	    //GD.Print("Viewport Resolution is: ", GetViewPortRect().Size);
 	}*/
 	
-	private void LocSetPosAndRot(Vector3 dir, float bodyrot, float turrot)
+	private float deg2rad(float val)
+	{
+		// yes, it's a shitty hack, but I'm on an airplane right now with no internet
+		double ratio = 57.324840764331206;
+		return (float) (val/ratio);
+	}
+	
+	private void LocSetPosAndRot(Vector3 dir, float bodyrot, float yaw, float pitch)
 	{
 		/*
 		Do the transformations to the player
 		*/
 		RotateY(bodyrot);
-		RotateTurret(turrot);
+		RotateTurret(yaw, pitch);
 		MoveAndSlide(dir, new Vector3(0, 1, 0), true);
 	}
 	
@@ -260,14 +296,18 @@ public class Tank : KinematicBody
 		turret.Transform = turrettrans;
 	}
 	
-	private void RotateTurret(float rot)
+	private void RotateTurret(float yaw, float pitch)
 	{
 		/*
 		To do turret rotation vertically, we will likely need to use quaternion here
+		
+		For some reason, when we rotate by two directions, the turret moves all over the place (around the tank)
 		*/
 		
-		//GD.Print("Rotating Turret");
-		turret.RotateY(rot);
+		//GD.Print(yaw);
+		turret.RotateY(yaw);
+		//turret.RotateX(pitch);
+		//turret.SetRotation(new Vector3(pitch, yaw, 0));
 	}
 	
 	private void Fire()
