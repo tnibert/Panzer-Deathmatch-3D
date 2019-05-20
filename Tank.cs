@@ -117,7 +117,7 @@ public class Tank : KinematicBody
 		//GD.Print("in physics process");
 		direction = new Vector3(0, 0, 0);
 		rotrad = 0;
-		//float TurretRot = 0;
+		float TurretRot = 0;
 		bool change = false;
 		
 		if(IsNetworkMaster())
@@ -147,68 +147,26 @@ public class Tank : KinematicBody
 				direction = -1 * GetTransform().basis.z;
 				change = true;
 			}
+			if(Input.IsActionPressed("tur_left"))
+			{
+				TurretRot = rotspeed * delta;
+				change = true;
+			}
+			if(Input.IsActionPressed("tur_right"))
+			{
+				TurretRot = -1 * rotspeed * delta;
+				change = true;
+			}
 
 			// Only true on frame that mouse was pressed
-			if(Input.IsActionJustPressed("left_mouse"))
+			if(Input.IsActionJustPressed("ui_select"))
 			{
 				Rpc("NetFire");
 				Fire();
 			}
-			if(Input.IsActionJustPressed("right_mouse"))
+			if(Input.IsActionJustPressed("swapcam"))
 			{
 				SwapCamera();
-			}
-			
-			// handle mouse movement
-			// example: https://github.com/Veraball/veraball/blob/master/data/scripts/game/ball.gd#L43-L52
-			/*
-			# Mouse look
-			# fmod() returns floating point remainder
-			func _input(event):
-				if event.type == InputEvent.MOUSE_MOTION and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-					yaw = fmod(yaw - event.relative_x * Game.view_sensitivity * 0.05, 360)
-					# Prevent yaw from becoming negative:
-					if yaw < 0:
-						yaw = 359.75
-					pitch = max(min(pitch - event.relative_y * Game.view_sensitivity * 0.05, 89), -89)
-					yaw_node.set_rotation(Vector3(0, deg2rad(yaw), 0))
-					pitch_node.set_rotation(Vector3(deg2rad(pitch), 0, 0))
-			*/
-			Vector2 newmousepos = GetViewport().GetMousePosition();
-			if(newmousepos != currentmousepos)
-			{
-				// difference is equivalent to (relative_x, relative_y)
-				Vector2 difference = currentmousepos - newmousepos;
-				currentmousepos = newmousepos;
-				
-				//TurretRot = turretrotspeed * delta * difference.x;
-				yaw = ((yaw - (difference.x * delta)) % 360);
-				if(yaw < 0)
-				{
-					yaw = 359.75f;
-				}
-				
-				//GD.Print(yaw);
-				/*pitch = pitch - difference.y % 360;
-				if(pitch < 0)
-				{
-					pitch = 359.75f;
-				}*/
-				
-				change = true;
-				
-				// wrap mouse around if at edge of viewport
-				//int offset = 10;
-				if(currentmousepos.x >= GetViewport().GetSize().x-1)
-				{
-					Input.WarpMousePosition(new Vector2(1, currentmousepos.y));
-					currentmousepos = GetViewport().GetMousePosition();
-				}
-				else if(currentmousepos.x <= 0)
-				{
-					Input.WarpMousePosition(new Vector2(GetViewport().GetSize().x-1, currentmousepos.y));
-					currentmousepos = GetViewport().GetMousePosition();
-				}
 			}
 			
 			if(Input.IsActionJustPressed("ui_cancel"))
@@ -248,7 +206,8 @@ public class Tank : KinematicBody
 		
 		if(change)
 		{
-			LocSetPosAndRot(direction, rotrad, deg2rad(yaw), deg2rad(pitch));
+			//LocSetPosAndRot(direction, rotrad, deg2rad(yaw), deg2rad(pitch));
+			LocSetPosAndRot(direction, rotrad, TurretRot);
 			
 			// announce movement
 			RpcUnreliable("NetSetTransforms", this.Transform, turret.Transform);
@@ -276,13 +235,13 @@ public class Tank : KinematicBody
 		return (float) (val/ratio);
 	}
 	
-	private void LocSetPosAndRot(Vector3 dir, float bodyrot, float yaw, float pitch)
+	private void LocSetPosAndRot(Vector3 dir, float bodyrot, float turrot)
 	{
 		/*
 		Do the transformations to the player
 		*/
 		RotateY(bodyrot);
-		RotateTurret(yaw, pitch);
+		RotateTurret(turrot);
 		MoveAndSlide(dir, new Vector3(0, 1, 0), true);
 	}
 	
@@ -296,7 +255,7 @@ public class Tank : KinematicBody
 		turret.Transform = turrettrans;
 	}
 	
-	private void RotateTurret(float yaw, float pitch)
+	private void RotateTurret(float rot)
 	{
 		/*
 		To do turret rotation vertically, we will likely need to use quaternion here
@@ -305,13 +264,14 @@ public class Tank : KinematicBody
 		*/
 		
 		//GD.Print(yaw);
-		turret.RotateY(yaw);
+		turret.RotateY(rot);
 		//turret.RotateX(pitch);
 		//turret.SetRotation(new Vector3(pitch, yaw, 0));
 	}
 	
 	private void Fire()
 	{
+		// todo: use ray casting for the bullet transformation and collision
 		//GD.Print("Fire");
 		
 		// instantiate bullet
