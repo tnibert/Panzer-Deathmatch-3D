@@ -71,6 +71,9 @@ public class Tank : KinematicBody
 	const Input.MouseMode MOUSE_MODE_HIDDEN = (Input.MouseMode) 1;
 	const Input.MouseMode MOUSE_MODE_VISIBLE = (Input.MouseMode) 0;
 
+	private Random seed = new Random();
+	Color defaultTankColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+	
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -88,13 +91,8 @@ public class Tank : KinematicBody
 		bulletscene = ResourceLoader.Load("res://Bullet.tscn") as Godot.PackedScene;
 		
 		// Set a color for the tank
-		Color tankcolor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
-		foreach(MeshInstance mesh in new MeshInstance[] {trackleft, trackright, body, (MeshInstance) GetNode("Turret/TurretMesh"), gun})
-		{
-			SpatialMaterial mat = (SpatialMaterial) mesh.GetSurfaceMaterial(0);
-			mat.AlbedoColor = tankcolor;
-			mesh.SetSurfaceMaterial(0, mat);
-		}
+		setTankColor(defaultTankColor);
+		
 		health = maxhealth;
 		
 		Input.SetMouseMode(MOUSE_MODE_CONFINED);
@@ -111,6 +109,16 @@ public class Tank : KinematicBody
       
     }*/
 
+	private void setTankColor(Color c)
+	{
+		foreach(MeshInstance mesh in new MeshInstance[] {trackleft, trackright, body, (MeshInstance) GetNode("Turret/TurretMesh"), gun})
+		{
+			SpatialMaterial mat = (SpatialMaterial) mesh.GetSurfaceMaterial(0);
+			mat.AlbedoColor = c;
+			mesh.SetSurfaceMaterial(0, mat);
+		}
+	}
+
 	public override void _PhysicsProcess(float delta)
 	{
 		//GD.Print(Transform);
@@ -122,6 +130,7 @@ public class Tank : KinematicBody
 		
 		if(IsNetworkMaster())
 		{
+			// todo: fix bug, if two keys are pressed simultaneously, neither respond
 			if(Input.IsActionPressed("ui_left"))
 			{
 				rotrad += rotspeed * delta;
@@ -300,7 +309,12 @@ public class Tank : KinematicBody
 	
 	public int DecrementHealth()
 	{
+		// decrement health and change the color of the tank
 		health--;
+		
+		// todo: fix bug, both tanks change the same color
+		setTankColor(new Color((float)seed.NextDouble(), (float)seed.NextDouble(), (float)seed.NextDouble()));
+		
 		if(health <= 0)
 		{
 			//GD.Print("DEAD!");
@@ -320,6 +334,7 @@ public class Tank : KinematicBody
 	{
 		this.Transform = spawnpoint;
 		health = maxhealth;
+		setTankColor(defaultTankColor);
 		// required to appear at spawn
 		MoveAndSlide(new Vector3(0, 0, 0), new Vector3(0, 1, 0), true);
 	}

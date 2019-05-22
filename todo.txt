@@ -1,10 +1,6 @@
 - make collision with walls more realistic (no sliding)
 - tile floor texture
 - tank turret rotation vertical
-- tank turret controlled by mouse
-    - add full range of turret motion when mouse is captured
-    - file bug report about capture mode
-    - bug: turret rotation skips when mouse wraps around - can mask with turrot rotation speed of 0.4, but that does not address root cause
 - improve the game map - terrain
 - health bar
 - explosion on bullet impact
@@ -16,3 +12,5 @@
     - tank drive
     - tank explosion
     - background music (something trip hoppy - https://www.youtube.com/watch?v=QoL4NHBpal4)
+
+- to consider: moving back to mouse controlling turret motion
