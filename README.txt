@@ -20,3 +20,9 @@ Space: Fire a shell
 Miscellaneous
 Ctrl: Swap between first and third person mode
 Esc: Unlock the mouse from the window (click in the window to relock)
+
+
+To build:
+Only built and tested on Ubuntu Linux 18.10.
+Need to have at least Godot 3.1 installed with Mono C# support.
+From Linux console, run ./build.sh.
