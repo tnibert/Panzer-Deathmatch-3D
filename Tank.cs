@@ -130,7 +130,6 @@ public class Tank : KinematicBody
 		
 		if(IsNetworkMaster())
 		{
-			// todo: fix bug, if two keys are pressed simultaneously, neither respond
 			if(Input.IsActionPressed("ui_left"))
 			{
 				rotrad += rotspeed * delta;

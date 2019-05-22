@@ -11,16 +11,16 @@ script = ExtResource( 1 )
 transform = Transform( 4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0 )
 
 [node name="Walls" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 39.602, 1.39903, -0.0158396 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 4.37522, 39.602, 1.39903, -0.0158396 )
 
 [node name="Walls2" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -39.8007, 1.39903, -0.0158396 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 4.74863, -39.8007, 1.39903, -0.0158396 )
 
 [node name="Walls3" parent="." instance=ExtResource( 3 )]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.212532, 1.39903, -39.8036 )
+transform = Transform( -1.9554e-07, 0, 4.47342, 0, 1, 0, -1, 0, -4.37114e-08, -0.212532, 1.39903, -39.8036 )
 
 [node name="Walls4" parent="." instance=ExtResource( 3 )]
-transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.212532, 1.39903, 39.5959 )
+transform = Transform( -2.15879e-07, 0, 4.93874, 0, 1, 0, -1, 0, -4.37114e-08, -0.212532, 1.39903, 39.5959 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.568091, 0.822966, 0, -0.822966, 0.568091, -0.0432968, 34.8575, 29.9553 )
