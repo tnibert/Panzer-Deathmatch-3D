@@ -113,7 +113,8 @@ public class Tank : KinematicBody
 	{
 		foreach(MeshInstance mesh in new MeshInstance[] {trackleft, trackright, body, (MeshInstance) GetNode("Turret/TurretMesh"), gun})
 		{
-			SpatialMaterial mat = (SpatialMaterial) mesh.GetSurfaceMaterial(0);
+			// need to use Duplicate() or we change the color of both tanks, they share the SpatialMaterial reference
+			SpatialMaterial mat = (SpatialMaterial) mesh.GetSurfaceMaterial(0).Duplicate(true);
 			mat.AlbedoColor = c;
 			mesh.SetSurfaceMaterial(0, mat);
 		}
