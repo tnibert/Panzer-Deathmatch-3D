@@ -95,8 +95,6 @@ public class Tank : KinematicBody
 		
 		health = maxhealth;
 		
-		Input.SetMouseMode(MOUSE_MODE_CONFINED);
-		
 		SetProcess(true);
 		
 		// required to appear at spawn
@@ -167,7 +165,7 @@ public class Tank : KinematicBody
 				change = true;
 			}
 
-			// Only true on frame that mouse was pressed
+			// Only true on frame that key was pressed
 			if(Input.IsActionJustPressed("ui_select"))
 			{
 				Rpc("NetFire");
@@ -178,17 +176,6 @@ public class Tank : KinematicBody
 				SwapCamera();
 			}
 			
-			if(Input.IsActionJustPressed("ui_cancel"))
-			{
-				if(Input.GetMouseMode() == MOUSE_MODE_CONFINED)
-				{
-					Input.SetMouseMode(MOUSE_MODE_VISIBLE);
-				}
-				else
-				{
-					Input.SetMouseMode(MOUSE_MODE_CONFINED);
-				}
-			}
 		}
 		//GD.Print(delta);
 		//GD.Print(direction);
