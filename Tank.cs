@@ -312,7 +312,6 @@ public class Tank : KinematicBody
 
 		EmitSignal("dec_local_health");
 		
-		// todo: fix bug, both tanks change the same color
 		setTankColor(new Color((float)seed.NextDouble(), (float)seed.NextDouble(), (float)seed.NextDouble()));
 		
 		if(health <= 0)
