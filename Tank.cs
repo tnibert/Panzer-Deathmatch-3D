@@ -77,6 +77,8 @@ public class Tank : KinematicBody
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+		//GD.Print(GetPath());
+		
 		// Get references to parts of tanks
         trackleft = (MeshInstance) GetNode("TrackLeft");
 		trackright = (MeshInstance) GetNode("TrackRight");
@@ -95,6 +97,10 @@ public class Tank : KinematicBody
 		
 		health = maxhealth;
 		
+		// add signals
+		AddUserSignal("dec_local_health");
+		AddUserSignal("local_died");
+		
 		SetProcess(true);
 		
 		// required to appear at spawn
@@ -106,6 +112,11 @@ public class Tank : KinematicBody
     {
       
     }*/
+
+	public int getMaxHealth()
+	{
+		return maxhealth;
+	}
 
 	private void setTankColor(Color c)
 	{
@@ -298,13 +309,15 @@ public class Tank : KinematicBody
 	{
 		// decrement health and change the color of the tank
 		health--;
+
+		EmitSignal("dec_local_health");
 		
 		// todo: fix bug, both tanks change the same color
 		setTankColor(new Color((float)seed.NextDouble(), (float)seed.NextDouble(), (float)seed.NextDouble()));
 		
 		if(health <= 0)
 		{
-			//GD.Print("DEAD!");
+			EmitSignal("local_died");
 			// explode and reset
 			Respawn();
 		}

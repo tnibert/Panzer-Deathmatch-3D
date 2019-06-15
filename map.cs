@@ -17,8 +17,13 @@ public class map : Spatial
     {
 		globals = (Globals)GetNode("/root/Globals");
 		
+		GD.Print(GetPath());
+		
         // instantiate the players
 		tankscene = ResourceLoader.Load("res://Tank.tscn") as Godot.PackedScene;
+		
+		// signal for HUD to listen for
+		AddUserSignal("tanks_created");
 		
 		Tank localplayer = (Tank) tankscene.Instance();
 		localplayer.SetName(GetTree().GetNetworkUniqueId().ToString());
@@ -46,6 +51,9 @@ public class map : Spatial
 		AddChild(remoteplayer);
 		
 		localplayer.SetActiveCam();
+		
+		// Notify the HUD that the tanks are available
+		EmitSignal("tanks_created");
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.

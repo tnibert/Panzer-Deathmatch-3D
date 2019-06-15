@@ -72,8 +72,8 @@ public class Lobby : Node2D
 	{
 		GD.Print("Connection established");
 		globals.otherPlayerId = id;
-		PackedScene map = ResourceLoader.Load("res://map.tscn") as Godot.PackedScene;
-    	Spatial game = (Spatial)map.Instance();
+		PackedScene gui = ResourceLoader.Load("res://GUI.tscn") as Godot.PackedScene;
+    	MarginContainer game = (MarginContainer) gui.Instance();
 		GetTree().GetRoot().AddChild(game);
 		Hide();
 	}
