@@ -1,16 +1,8 @@
+Just some ideas, most things are in github issues:
 - make collision with walls more realistic (no sliding)
 - tile floor texture
-- tank turret rotation vertical
 - improve the game map - terrain
-- health bar
-- explosion on bullet impact
 - tank explosion on death
 - complete automate build on travis-ci with no X
-
-- sound effects
-    - tank fire
-    - tank drive
-    - tank explosion
-    - background music (something trip hoppy - https://www.youtube.com/watch?v=QoL4NHBpal4)
 
 - to consider: moving back to mouse controlling turret motion
