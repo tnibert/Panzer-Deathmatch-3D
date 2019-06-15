@@ -49,6 +49,10 @@ public class Tank : KinematicBody
 	private Camera firstpersoncamera;
 	
 	private Vector3 direction = new Vector3();
+
+	// for respawn delay
+	private Timer deathtimer = new Timer();
+	private int RESPAWN_SECONDS = 3;
 	
 	// these speeds are calculated in with other variables, they are not equivalent
 	private int speed = 200;			// will be multiplied by delta
@@ -64,6 +68,7 @@ public class Tank : KinematicBody
 	protected int health;
 	private bool firstperson = false;
 	
+	// these mouse things aren't really necessary anymore...
 	private Vector2 currentmousepos = new Vector2();
 	
 	const Input.MouseMode MOUSE_MODE_CONFINED = (Input.MouseMode) 3;
@@ -99,7 +104,12 @@ public class Tank : KinematicBody
 		
 		// add signals
 		AddUserSignal("dec_local_health");
-		AddUserSignal("local_died");
+		AddUserSignal("respawn");
+		
+		// connect respawn timer
+		AddChild(deathtimer);
+		deathtimer.Connect("timeout", this, "Respawn");
+		deathtimer.SetWaitTime(RESPAWN_SECONDS);
 		
 		SetProcess(true);
 		
@@ -316,9 +326,13 @@ public class Tank : KinematicBody
 		
 		if(health <= 0)
 		{
-			EmitSignal("local_died");
-			// explode and reset
-			Respawn();
+			/* 
+			   todo: currently we are just making the tank invisible
+					 the other tank can still collide with it
+					 fix this
+			*/
+			this.Hide();
+			deathtimer.Start();
 		}
 		return health;
 	}
@@ -331,11 +345,15 @@ public class Tank : KinematicBody
 	
 	private void Respawn()
 	{
+		// todo: what happens if we respawn on top of another player?
+		deathtimer.Stop();
+		EmitSignal("respawn");
 		this.Transform = spawnpoint;
 		health = maxhealth;
 		setTankColor(defaultTankColor);
 		// required to appear at spawn
 		MoveAndSlide(new Vector3(0, 0, 0), new Vector3(0, 1, 0), true);
+		this.Show();
 	}
 	
 	public Camera SetActiveCam()

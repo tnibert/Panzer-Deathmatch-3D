@@ -28,7 +28,7 @@ public class GUI : MarginContainer
     	_bar.MaxValue = localPlayer.getMaxHealth();
 		_bar.Value = _bar.MaxValue;
 		localPlayer.Connect("dec_local_health", this, nameof(DecrementBar));
-		localPlayer.Connect("local_died", this, nameof(ResetBar));
+		localPlayer.Connect("respawn", this, nameof(ResetBar));
     }
 
 	public void DecrementBar()
