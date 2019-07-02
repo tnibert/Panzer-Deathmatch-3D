@@ -14,15 +14,15 @@ particles_anim_loop = false
 albedo_color = Color( 0.619608, 0.376471, 0.0862745, 1 )
 albedo_texture = ExtResource( 1 )
 
-[sub_resource type="Curve" id=4]
+[sub_resource type="Curve" id=2]
 
 _data = [ Vector2( 0.1765, 0.928194 ), 0.0, 0.0, 0, 0, Vector2( 0.48706, 0.787394 ), 0.0, 0.0, 0, 0, Vector2( 0.818324, 0.637794 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=5]
+[sub_resource type="CurveTexture" id=3]
 
-curve = SubResource( 4 )
+curve = SubResource( 2 )
 
-[sub_resource type="ParticlesMaterial" id=2]
+[sub_resource type="ParticlesMaterial" id=4]
 
 emission_shape = 1
 emission_sphere_radius = 1.0
@@ -32,16 +32,16 @@ angular_velocity = 30.0
 angular_velocity_random = 1.0
 linear_accel = 2.0
 scale = 3.0
-scale_curve = SubResource( 5 )
+scale_curve = SubResource( 3 )
 
-[sub_resource type="QuadMesh" id=3]
+[sub_resource type="QuadMesh" id=5]
 
 
-[node name="Explosion" type="Node"]
+[node name="Explosion" type="Spatial"]
 
 [node name="Particles" type="Particles" parent="."]
 material_override = SubResource( 1 )
 visibility_aabb = AABB( -4.19919, -4, -4, 8.39838, 8, 8 )
-process_material = SubResource( 2 )
-draw_pass_1 = SubResource( 3 )
+process_material = SubResource( 4 )
+draw_pass_1 = SubResource( 5 )
 

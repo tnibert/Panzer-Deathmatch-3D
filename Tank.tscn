@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Tank.cs" type="Script" id=1]
+[ext_resource path="res://Explosion.tscn" type="PackedScene" id=2]
 
 [sub_resource type="CapsuleMesh" id=1]
 
@@ -74,6 +75,9 @@ transform = Transform( -4.61681, 2.83983e-07, 7.06925e-20, 1.76425e-14, 2.8682e-
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1.9619, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884948, -0.0381331 )
 shape = SubResource( 10 )
+
+[node name="Explosion" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51036, -0.140479 )
 
 [node name="ThirdPersonCam" type="Camera" parent="."]
 transform = Transform( -1, 8.74228e-08, -1.77636e-15, 8.58288e-08, 0.981767, 0.190089, 1.66181e-08, 0.190089, -0.981767, 0, 3.8688, -8.11854 )

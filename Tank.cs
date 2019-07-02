@@ -47,12 +47,13 @@ public class Tank : KinematicBody
 	private PackedScene bulletscene;
 	private Camera thirdpersoncamera;
 	private Camera firstpersoncamera;
+	private Particles explosion;
 	
 	private Vector3 direction = new Vector3();
 
 	// for respawn delay
 	private Timer deathtimer = new Timer();
-	private int RESPAWN_SECONDS = 3;
+	private int RESPAWN_SECONDS = 8;
 	
 	// these speeds are calculated in with other variables, they are not equivalent
 	private int speed = 200;			// will be multiplied by delta
@@ -67,6 +68,7 @@ public class Tank : KinematicBody
 	private int maxhealth = 6;
 	protected int health;
 	private bool firstperson = false;
+	private bool localcontrolactive = true;
 	
 	// these mouse things aren't really necessary anymore...
 	private Vector2 currentmousepos = new Vector2();
@@ -93,6 +95,10 @@ public class Tank : KinematicBody
 		
 		thirdpersoncamera = (Camera) GetNode("ThirdPersonCam");
 		firstpersoncamera = (Camera) GetNode("Turret/TurretMesh/Gun/BulletSpawn/Camera");
+		
+		// reference to explosion for death
+		explosion = (Particles) GetNode("Explosion/Particles");
+		explosion.SetEmitting(false);
 		
 		// Load bullet scene
 		bulletscene = ResourceLoader.Load("res://Bullet.tscn") as Godot.PackedScene;
@@ -148,7 +154,7 @@ public class Tank : KinematicBody
 		float TurretRot = 0;
 		bool change = false;
 		
-		if(IsNetworkMaster())
+		if(IsNetworkMaster() && localcontrolactive)
 		{
 			if(Input.IsActionPressed("ui_left"))
 			{
@@ -326,15 +332,16 @@ public class Tank : KinematicBody
 		
 		if(health <= 0)
 		{
-			/* 
-			   todo: currently we are just making the tank invisible
-					 the other tank can still collide with it
-					 fix this
-			*/
-			this.Hide();
+			localcontrolactive = false;
+			Explode();
 			deathtimer.Start();
 		}
 		return health;
+	}
+	
+	public void Explode()
+	{
+		explosion.SetEmitting(true);
 	}
 	
 	public void SetRespawn()
@@ -351,9 +358,14 @@ public class Tank : KinematicBody
 		this.Transform = spawnpoint;
 		health = maxhealth;
 		setTankColor(defaultTankColor);
+		
+		// todo: remove explosion from scene tree
+		explosion.SetEmitting(false);
+		
 		// required to appear at spawn
 		MoveAndSlide(new Vector3(0, 0, 0), new Vector3(0, 1, 0), true);
-		this.Show();
+
+		localcontrolactive = true;
 	}
 	
 	public Camera SetActiveCam()
