@@ -330,7 +330,8 @@ public class Tank : KinematicBody
 		
 		setTankColor(new Color((float)seed.NextDouble(), (float)seed.NextDouble(), (float)seed.NextDouble()));
 		
-		if(health <= 0)
+		// if the health has been depleted and we haven't previously entered this branch (timer hasn't been started)
+		if(health <= 0 && deathtimer.IsStopped())
 		{
 			localcontrolactive = false;
 			Explode();
