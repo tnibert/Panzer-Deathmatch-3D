@@ -23,6 +23,6 @@ Esc: Unlock the mouse from the window (click in the window to relock)
 
 
 To build:
-Only built and tested on Ubuntu Linux 18.10.
+Only built on Ubuntu Linux 18.10.  Tested on Ubuntu Linux 18.10 and Windows 10.
 Need to have at least Godot 3.1 installed with Mono C# support.
-From Linux console, run ./build.sh.
+From Linux console, run ./build.sh.  You will need to modify the $GODOT variable in the script to reference your Godot binary.
