@@ -1,4 +1,8 @@
 #! /bin/bash
-/home/tim/code/godot/godot/bin/godot.x11.opt.tools.64.mono --export "Linux/X11" panzerdeathmatch3d-linux
-#/home/tim/code/godot/godot/bin/godot.x11.opt.tools.64.mono --export "Windows Desktop" panzerdeathmatch3d-windows
+
+# path to the godot executable
+GODOT=/home/tim/bin/Godot_v3.1.1-stable_mono_x11_64/Godot_v3.1.1-stable_mono_x11.64
+
+$GODOT --export "Linux/X11" panzerdeathmatch3d-linux
+$GODOT --export "Windows Desktop" panzerdeathmatch3d-windows.exe
 
