@@ -64,6 +64,8 @@ public class Tank : KinematicBody
 	private float pitch = 0;
 	private float yaw = 0;
 	
+	private float originalY;
+	
 	private Transform spawnpoint;
 	private int maxhealth = 6;
 	protected int health;
@@ -84,8 +86,6 @@ public class Tank : KinematicBody
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-		//GD.Print(GetPath());
-		
 		// Get references to parts of tanks
         trackleft = (MeshInstance) GetNode("TrackLeft");
 		trackright = (MeshInstance) GetNode("TrackRight");
@@ -121,6 +121,9 @@ public class Tank : KinematicBody
 		
 		// required to appear at spawn
 		MoveAndSlide(new Vector3(0, 0, 0), new Vector3(0, 1, 0), true);
+		
+		// enforce no flying tanks issue #20
+		originalY = Transform.origin.y;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -147,8 +150,12 @@ public class Tank : KinematicBody
 
 	public override void _PhysicsProcess(float delta)
 	{
-		//GD.Print(Transform);
-		//GD.Print("in physics process");
+		// if the tank respawns in the air or underground, bring it back to earth (issue #20)
+		if(Transform.origin.y != originalY)
+		{
+			MoveAndSlide(new Vector3(0, originalY-Transform.origin.y, 0), new Vector3(0, 1, 0), true);
+		}
+		
 		direction = new Vector3(0, 0, 0);
 		rotrad = 0;
 		float TurretRot = 0;
@@ -203,10 +210,7 @@ public class Tank : KinematicBody
 				SwapCamera();
 			}
 			
-		}
-		//GD.Print(delta);
-		//GD.Print(direction);
-		//GD.Print("------");		
+		}		
 		
 		direction = direction.Normalized();
 		direction = direction * speed * delta;
@@ -342,6 +346,7 @@ public class Tank : KinematicBody
 	
 	public void Explode()
 	{
+		// note that we set emitting false in Respawn()
 		explosion.SetEmitting(true);
 	}
 	
@@ -352,20 +357,19 @@ public class Tank : KinematicBody
 	}
 	
 	private void Respawn()
-	{
-		// todo: what happens if we respawn on top of another player?
+	{	
 		deathtimer.Stop();
 		EmitSignal("respawn");
-		this.Transform = spawnpoint;
 		health = maxhealth;
 		setTankColor(defaultTankColor);
 		
-		// todo: remove explosion from scene tree
 		explosion.SetEmitting(false);
 		
-		// required to appear at spawn
+		// move to spawn point
+		this.Transform = spawnpoint;
 		MoveAndSlide(new Vector3(0, 0, 0), new Vector3(0, 1, 0), true);
-
+		
+		// restore user controls
 		localcontrolactive = true;
 	}
 	
