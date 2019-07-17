@@ -19,7 +19,6 @@ Space: Fire a shell
 
 Miscellaneous
 Ctrl: Swap between first and third person mode
-Esc: Unlock the mouse from the window (click in the window to relock)
 
 
 To build:
