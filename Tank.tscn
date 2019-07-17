@@ -67,10 +67,10 @@ mesh = SubResource( 8 )
 material/0 = SubResource( 9 )
 
 [node name="BulletSpawn" type="Spatial" parent="Turret/TurretMesh/Gun"]
-transform = Transform( 1, 0, 0, 0, 1, 1.42109e-14, 0, 7.10543e-15, 1, 0, 2.00199, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 2.75335e-14, 0, 1.42109e-14, 1, 0, 2.31017, -1.90735e-06 )
 
 [node name="Camera" type="Camera" parent="Turret/TurretMesh/Gun/BulletSpawn"]
-transform = Transform( -4.61681, 2.83983e-07, 7.06925e-20, 1.76425e-14, 2.8682e-07, -1.66667, -4.03614e-07, -6.56168, -1.12921e-06, 0, -3.71651, -3.2276 )
+transform = Transform( -4.61681, 2.83983e-07, 5.70171e-20, 1.76425e-14, 2.8682e-07, -1.66667, -4.03614e-07, -6.56168, -1.12921e-06, 0, -4.06276, -3.2276 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1.9619, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.884948, -0.0381331 )
