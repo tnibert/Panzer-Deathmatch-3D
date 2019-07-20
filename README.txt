@@ -1,8 +1,10 @@
 Panzer Deathmatch 3D
 
-This game is a 2 player networked tank battle game.
+This is a 2 player networked tank battle game.
 
 When the game loads, one player must click Host and the other must enter the IP of the host and click Join.
+
+If you are hosting over the internet, you'll need to forward port 4242 on your router.
 
 Controls:
 
