@@ -18,13 +18,10 @@ public class GUI : MarginContainer
 	
     public override void _Ready()
     {
-		GD.Print(GetPath());
-		
         _bar = (TextureProgress) GetNode("HBoxContainer/Bars/Bar/Health/TextureProgress");
 		
 		// _ready() is called for children before parent
 		localPlayer = (Tank) GetTree().GetRoot().FindNode(GetTree().GetNetworkUniqueId().ToString(), true, false);
-		GD.Print(localPlayer);
     	_bar.MaxValue = localPlayer.getMaxHealth();
 		_bar.Value = _bar.MaxValue;
 		localPlayer.Connect("dec_local_health", this, nameof(DecrementBar));

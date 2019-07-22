@@ -17,8 +17,6 @@ public class map : Spatial
     {
 		globals = (Globals)GetNode("/root/Globals");
 		
-		GD.Print(GetPath());
-		
         // instantiate the players
 		tankscene = ResourceLoader.Load("res://Tank.tscn") as Godot.PackedScene;
 		
