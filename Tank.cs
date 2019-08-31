@@ -48,6 +48,7 @@ public class Tank : KinematicBody
 	private Camera thirdpersoncamera;
 	private Camera firstpersoncamera;
 	private Particles explosion;
+	private AudioStreamPlayer3D trackmovementsound;
 	
 	private Vector3 direction = new Vector3();
 
@@ -93,6 +94,10 @@ public class Tank : KinematicBody
 		turret = (KinematicBody) GetNode("Turret");
 		gun = (MeshInstance) GetNode("Turret/TurretMesh/Gun");
 		
+		// load sounds
+		trackmovementsound = (AudioStreamPlayer3D) GetNode("TrackMovementSound");
+		
+		// load cameras
 		thirdpersoncamera = (Camera) GetNode("ThirdPersonCam");
 		firstpersoncamera = (Camera) GetNode("Turret/TurretMesh/Gun/BulletSpawn/Camera");
 		
@@ -182,11 +187,19 @@ public class Tank : KinematicBody
 				//vel = new Vector3(0, 1, 0).Rotated(new Vector3(0,0,1), rotrad * Mathf.Pi) * speed * delta;
 				direction = GetTransform().basis.z;
 				change = true;
+				if(!trackmovementsound.IsPlaying())
+				{
+					trackmovementsound.Play();
+				}
 			}
 			if(Input.IsActionPressed("ui_down"))
 			{
 				direction = -1 * GetTransform().basis.z;
 				change = true;
+				if(!trackmovementsound.IsPlaying())
+				{
+					trackmovementsound.Play();
+				}
 			}
 			if(Input.IsActionPressed("tur_left"))
 			{
@@ -238,6 +251,10 @@ public class Tank : KinematicBody
 			
 			// announce movement
 			RpcUnreliable("NetSetTransforms", this.Transform, turret.Transform);
+		}
+		else
+		{
+			trackmovementsound.Stop();
 		}
 		
 		// we don't need this, cause out of scope after, but I like being explicit for sanity, blame biomed

@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Tank.cs" type="Script" id=1]
 [ext_resource path="res://Explosion.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/sounds/242739__marlonhj__engine-1.wav" type="AudioStream" id=3]
 
 [sub_resource type="CapsuleMesh" id=1]
 
@@ -71,3 +72,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51036, -0.140479 )
 
 [node name="ThirdPersonCam" type="Camera" parent="."]
 transform = Transform( -1, 8.74228e-08, -1.77636e-15, 8.58288e-08, 0.981767, 0.190089, 1.66181e-08, 0.190089, -0.981767, 0, 3.8688, -8.11854 )
+
+[node name="TrackMovementSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 3 )
