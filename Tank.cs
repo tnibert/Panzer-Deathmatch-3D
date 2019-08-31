@@ -49,6 +49,7 @@ public class Tank : KinematicBody
 	private Camera firstpersoncamera;
 	private Particles explosion;
 	private AudioStreamPlayer3D trackmovementsound;
+	private AudioStreamPlayer3D firesound;
 	
 	private Vector3 direction = new Vector3();
 
@@ -96,6 +97,7 @@ public class Tank : KinematicBody
 		
 		// load sounds
 		trackmovementsound = (AudioStreamPlayer3D) GetNode("TrackMovementSound");
+		firesound = (AudioStreamPlayer3D) GetNode("FireSound");
 		
 		// load cameras
 		thirdpersoncamera = (Camera) GetNode("ThirdPersonCam");
@@ -330,6 +332,7 @@ public class Tank : KinematicBody
 		// add to scene
 		GetParent().AddChild(bullet);
 		bullet.Show();
+		firesound.Play();
 	}
 	
 	[Remote]
