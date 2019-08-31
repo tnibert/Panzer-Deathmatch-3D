@@ -189,19 +189,11 @@ public class Tank : KinematicBody
 				//vel = new Vector3(0, 1, 0).Rotated(new Vector3(0,0,1), rotrad * Mathf.Pi) * speed * delta;
 				direction = GetTransform().basis.z;
 				change = true;
-				if(!trackmovementsound.IsPlaying())
-				{
-					trackmovementsound.Play();
-				}
 			}
 			if(Input.IsActionPressed("ui_down"))
 			{
 				direction = -1 * GetTransform().basis.z;
 				change = true;
-				if(!trackmovementsound.IsPlaying())
-				{
-					trackmovementsound.Play();
-				}
 			}
 			if(Input.IsActionPressed("tur_left"))
 			{
@@ -248,6 +240,12 @@ public class Tank : KinematicBody
 		
 		if(change)
 		{
+			// play movement audio
+			if(!trackmovementsound.IsPlaying())
+			{
+				trackmovementsound.Play();
+			}
+			
 			//LocSetPosAndRot(direction, rotrad, deg2rad(yaw), deg2rad(pitch));
 			LocSetPosAndRot(direction, rotrad, TurretRot);
 			
