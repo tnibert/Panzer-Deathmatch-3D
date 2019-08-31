@@ -50,6 +50,7 @@ public class Tank : KinematicBody
 	private Particles explosion;
 	private AudioStreamPlayer3D trackmovementsound;
 	private AudioStreamPlayer3D firesound;
+	private AudioStreamPlayer3D explodesound;
 	
 	private Vector3 direction = new Vector3();
 
@@ -98,6 +99,7 @@ public class Tank : KinematicBody
 		// load sounds
 		trackmovementsound = (AudioStreamPlayer3D) GetNode("TrackMovementSound");
 		firesound = (AudioStreamPlayer3D) GetNode("FireSound");
+		explodesound = (AudioStreamPlayer3D) GetNode("ExplosionSound");
 		
 		// load cameras
 		thirdpersoncamera = (Camera) GetNode("ThirdPersonCam");
@@ -366,6 +368,7 @@ public class Tank : KinematicBody
 	public void Explode()
 	{
 		// note that we set emitting false in Respawn()
+		explodesound.Play();
 		explosion.SetEmitting(true);
 	}
 	
