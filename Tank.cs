@@ -118,6 +118,7 @@ public class Tank : KinematicBody
 		// add signals
 		AddUserSignal("dec_local_health");
 		AddUserSignal("respawn");
+		AddUserSignal("bullet_fired");
 		
 		// connect respawn timer
 		AddChild(deathtimer);
@@ -331,6 +332,7 @@ public class Tank : KinematicBody
 		GetParent().AddChild(bullet);
 		bullet.Show();
 		firesound.Play();
+		EmitSignal("bullet_fired", bullet);
 	}
 	
 	[Remote]
@@ -338,7 +340,6 @@ public class Tank : KinematicBody
 	{
 		/*
 		Physics engine does not produce same results across network
-		Make bullet kinematicbody?
 		*/
 		Fire();
 	}

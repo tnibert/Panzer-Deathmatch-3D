@@ -11,6 +11,7 @@ public class map : Spatial
 	private KinematicBody localplayer;
 	private KinematicBody remoteplayer;
 	private Globals globals;
+	private AudioStreamPlayer3D hitsound;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -19,6 +20,9 @@ public class map : Spatial
 		
         // instantiate the players
 		tankscene = ResourceLoader.Load("res://Tank.tscn") as Godot.PackedScene;
+		
+		// load audio
+		hitsound = (AudioStreamPlayer3D) GetNode("hitsound");
 		
 		// signal for HUD to listen for
 		AddUserSignal("tanks_created");
@@ -48,12 +52,26 @@ public class map : Spatial
 		AddChild(localplayer);
 		AddChild(remoteplayer);
 		
+		// connect signals for tanks
+		localplayer.Connect("bullet_fired", this, nameof(newBullet));
+		remoteplayer.Connect("bullet_fired", this, nameof(newBullet));
+		
 		localplayer.SetActiveCam();
 		
 		// Notify the HUD that the tanks are available
 		EmitSignal("tanks_created");
     }
 
+	private void newBullet(Node bullet)
+	{
+		RigidBody b = (RigidBody) bullet;
+		b.Connect("body_entered", this, nameof(playHitAudio));
+	}
+	
+	private void playHitAudio(Node who)
+	{
+		hitsound.Play();
+	}
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
 //  public override void _Process(float delta)
 //  {

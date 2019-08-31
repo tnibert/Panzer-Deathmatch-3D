@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://map.cs" type="Script" id=1]
 [ext_resource path="res://Floor.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Walls.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/sounds/21794__splashzooka__smash-speel.wav" type="AudioStream" id=4]
 
 [node name="Map" type="Spatial"]
 script = ExtResource( 1 )
@@ -28,3 +29,5 @@ transform = Transform( 1, 0, 0, 0, 0.568091, 0.822966, 0, -0.822966, 0.568091, -
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.75558, 11.097, 6.19875 )
 
+[node name="hitsound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 4 )
