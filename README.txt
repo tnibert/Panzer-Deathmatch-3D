@@ -27,3 +27,9 @@ To build:
 Only built on Ubuntu Linux 18.10.  Tested on Ubuntu Linux 18.10 and Windows 10.
 Need to have at least Godot 3.1 installed with Mono C# support.
 From Linux console, run ./build.sh.  You will need to modify the $GODOT variable in the script to reference your Godot binary.
+
+Credits:
+Copyright Tim Nibert @ Iron Lotus Studios, released MIT license
+Sounds from freesound.org
+
+http://www.ironlotuscomputer.com.au
