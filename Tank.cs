@@ -357,10 +357,18 @@ public class Tank : KinematicBody
 		// decrement health and change the color of the tank
 		health--;
 
-		EmitSignal("dec_local_health");
-		
+		// local health is master, sync across network for consistency
+		// this must be done because RigidBody bullet is not consistent in moving between network clients
+		if(IsNetworkMaster())
+		{
+			Rpc("NetDecHealth");
+			
+			// for health bar
+			EmitSignal("dec_local_health");
+		}
+
 		setTankColor(new Color((float)seed.NextDouble(), (float)seed.NextDouble(), (float)seed.NextDouble()));
-		
+
 		// if the health has been depleted and we haven't previously entered this branch (timer hasn't been started)
 		if(health <= 0 && deathtimer.IsStopped())
 		{
@@ -369,6 +377,12 @@ public class Tank : KinematicBody
 			deathtimer.Start();
 		}
 		return health;
+	}
+
+	[Remote]
+	private void NetDecHealth()
+	{
+		DecrementHealth();
 	}
 	
 	public void Explode()

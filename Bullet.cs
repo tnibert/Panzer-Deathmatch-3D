@@ -33,8 +33,16 @@ public class Bullet : RigidBody
 	public void colliding(Node who)
 	{
 		//GD.Print(this.GetName()," is colliding with ",who.GetName());
+		// todo: maybe remove this try catch (what happens if bullet collides with wall?)
 		try {
-			((Tank)who).DecrementHealth();
+			Tank localPlayer = (Tank) GetTree().GetRoot().FindNode(GetTree().GetNetworkUniqueId().ToString(), true, false);
+			
+			// only decrement the health of the local player
+			// we will update the remotes via RPC
+			if(who == localPlayer)
+			{
+				((Tank)who).DecrementHealth();
+			}
 			//GD.Print("Health decremented");
 		} catch {
 			//GD.Print("could not decrement health");
