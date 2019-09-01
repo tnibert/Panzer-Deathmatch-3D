@@ -9,6 +9,7 @@ public class Lobby : Node2D
 	Button joinbutton;
 	Label label;
 	private Globals globals;
+	private const int PORT_NUM = 4242;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -46,7 +47,7 @@ public class Lobby : Node2D
 		label.Text = "Joining Game";
 		
 		NetworkedMultiplayerENet host = new NetworkedMultiplayerENet();
-		host.CreateClient(hostip.Text, 4242);
+		host.CreateClient(hostip.Text, PORT_NUM);
 		GetTree().SetNetworkPeer(host);
 	}
 	
@@ -54,7 +55,7 @@ public class Lobby : Node2D
 	{
 		// initialize network game
 		NetworkedMultiplayerENet host = new NetworkedMultiplayerENet();
-		var resp = host.CreateServer(4242,2);
+		var resp = host.CreateServer(PORT_NUM,2);
 		if(resp != 0)
 		{
 			GD.Print("ruh roh");
