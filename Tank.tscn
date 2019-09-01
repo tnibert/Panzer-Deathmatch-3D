@@ -75,12 +75,14 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.51036, -0.140479 )
 [node name="ThirdPersonCam" type="Camera" parent="."]
 transform = Transform( -1, 8.74228e-08, -1.77636e-15, 8.58288e-08, 0.981767, 0.190089, 1.66181e-08, 0.190089, -0.981767, 0, 3.8688, -8.11854 )
 
-[node name="TrackMovementSound" type="AudioStreamPlayer3D" parent="."]
+[node name="SoundGroup" type="Node" parent="."]
+
+[node name="TrackMovementSound" type="AudioStreamPlayer3D" parent="SoundGroup"]
 stream = ExtResource( 3 )
 
-[node name="FireSound" type="AudioStreamPlayer3D" parent="."]
+[node name="FireSound" type="AudioStreamPlayer3D" parent="SoundGroup"]
 stream = ExtResource( 4 )
 
-[node name="ExplosionSound" type="AudioStreamPlayer3D" parent="."]
+[node name="ExplosionSound" type="AudioStreamPlayer3D" parent="SoundGroup"]
 stream = ExtResource( 5 )
-unit_db = 28.829
+unit_db = 20.18

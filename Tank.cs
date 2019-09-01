@@ -37,7 +37,7 @@ Use IsNetworkServer() to control collision detection
 */
 
 public class Tank : KinematicBody
-{
+{	
 	// Keep references to our children, might be best to structure later
 	private MeshInstance trackleft;
 	private MeshInstance trackright;
@@ -48,6 +48,9 @@ public class Tank : KinematicBody
 	private Camera thirdpersoncamera;
 	private Camera firstpersoncamera;
 	private Particles explosion;
+	
+	// Audio resources
+	private Node soundgroup;
 	private AudioStreamPlayer3D trackmovementsound;
 	private AudioStreamPlayer3D firesound;
 	private AudioStreamPlayer3D explodesound;
@@ -78,11 +81,13 @@ public class Tank : KinematicBody
 	// these mouse things aren't really necessary anymore...
 	private Vector2 currentmousepos = new Vector2();
 	
+	/*
 	const Input.MouseMode MOUSE_MODE_CONFINED = (Input.MouseMode) 3;
 	const Input.MouseMode MOUSE_MODE_CAPTURED = (Input.MouseMode) 2;
 	const Input.MouseMode MOUSE_MODE_HIDDEN = (Input.MouseMode) 1;
 	const Input.MouseMode MOUSE_MODE_VISIBLE = (Input.MouseMode) 0;
-
+	*/
+	
 	private Random seed = new Random();
 	Color defaultTankColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 	
@@ -97,9 +102,10 @@ public class Tank : KinematicBody
 		gun = (MeshInstance) GetNode("Turret/TurretMesh/Gun");
 		
 		// load sounds
-		trackmovementsound = (AudioStreamPlayer3D) GetNode("TrackMovementSound");
-		firesound = (AudioStreamPlayer3D) GetNode("FireSound");
-		explodesound = (AudioStreamPlayer3D) GetNode("ExplosionSound");
+		trackmovementsound = (AudioStreamPlayer3D) GetNode("SoundGroup/TrackMovementSound");
+		firesound = (AudioStreamPlayer3D) GetNode("SoundGroup/FireSound");
+		explodesound = (AudioStreamPlayer3D) GetNode("SoundGroup/ExplosionSound");
+		soundgroup = GetNode("SoundGroup");
 		
 		// load cameras
 		thirdpersoncamera = (Camera) GetNode("ThirdPersonCam");
@@ -406,14 +412,18 @@ public class Tank : KinematicBody
 	{
 		/*
 		Switch between first person and third person cameras
+		If we were to reparent the sound group, the sound would not adjust volume at camera switch
+		However, I kind of like the effect of feeling inside vs outside the tank
 		*/
 		if(!firstperson)
 		{
 			firstpersoncamera.MakeCurrent();
+			//Globals.reparent(soundgroup, this);
 		}
 		else
 		{
 			thirdpersoncamera.MakeCurrent();
+			//Globals.reparent(soundgroup, thirdpersoncamera);
 		}
 		firstperson = !firstperson;
 	}
