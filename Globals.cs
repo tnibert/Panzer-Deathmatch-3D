@@ -3,8 +3,8 @@ using System;
 
 public class Globals : Godot.Node
 {
-    // Declare member variables here. Examples:
-    public int otherPlayerId = -1;
+	// Declare member variables here. Examples:
+	public int otherPlayerId = -1;
 	
 	/**
 	* Reparent node o to become a child of node n

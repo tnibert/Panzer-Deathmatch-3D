@@ -91,11 +91,11 @@ public class Tank : KinematicBody
 	private Random seed = new Random();
 	Color defaultTankColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
 	
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
 		// Get references to parts of tanks
-        trackleft = (MeshInstance) GetNode("TrackLeft");
+		trackleft = (MeshInstance) GetNode("TrackLeft");
 		trackright = (MeshInstance) GetNode("TrackRight");
 		body = (MeshInstance) GetNode("Body");
 		turret = (KinematicBody) GetNode("Turret");
@@ -140,13 +140,13 @@ public class Tank : KinematicBody
 		
 		// enforce no flying tanks issue #20
 		originalY = Transform.origin.y;
-    }
+	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    /*public override void _Process(float delta)
-    {
-      
-    }*/
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	/*public override void _Process(float delta)
+	{
+	  
+	}*/
 
 	public int getMaxHealth()
 	{
@@ -273,12 +273,12 @@ public class Tank : KinematicBody
 	/*public override void _Input(InputEvent @event)
 	{
 		// This is kind of a hack to get our mouse to direct our turret rotation
-	    // Relative mouse position
-	    if (@event is InputEventMouseMotion eventMouseMotion)
-	        GD.Print("Mouse Motion at: ", eventMouseMotion.GetRelative());
+		// Relative mouse position
+		if (@event is InputEventMouseMotion eventMouseMotion)
+			GD.Print("Mouse Motion at: ", eventMouseMotion.GetRelative());
 	
-	    // Print the size of the viewport
-	    //GD.Print("Viewport Resolution is: ", GetViewPortRect().Size);
+		// Print the size of the viewport
+		//GD.Print("Viewport Resolution is: ", GetViewPortRect().Size);
 	}*/
 	
 	private float deg2rad(float val)

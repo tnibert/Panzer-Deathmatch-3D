@@ -3,20 +3,20 @@ using System;
 
 public class Lobby : Node2D
 {
-    // Declare member variables here. Examples:
-    LineEdit hostip;
+	// Declare member variables here. Examples:
+	LineEdit hostip;
 	Button hostbutton;
 	Button joinbutton;
 	Label label;
 	private Globals globals;
 	private const int PORT_NUM = 4242;
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
 		globals = (Globals)GetNode("/root/Globals");
 		
-        hostip = (LineEdit) GetNode("IPaddressInput");
+		hostip = (LineEdit) GetNode("IPaddressInput");
 		hostbutton = (Button) GetNode("HostButton");
 		joinbutton = (Button) GetNode("JoinButton");
 		label = (Label) GetNode("HostLabel");
@@ -25,13 +25,13 @@ public class Lobby : Node2D
 		hostbutton.Connect("pressed", this, "HostGame");
 		joinbutton.Connect("pressed", this, "JoinGame");
 		GetTree().Connect("network_peer_connected", this, "PlayerConnected");
-    }
+	}
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    /*public override void _Process(float delta)
-    {
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	/*public override void _Process(float delta)
+	{
 
-    }*/
+	}*/
 	
 	private void HideAll()
 	{
@@ -74,7 +74,7 @@ public class Lobby : Node2D
 		GD.Print("Connection established");
 		globals.otherPlayerId = id;
 		PackedScene gui = ResourceLoader.Load("res://GUI.tscn") as Godot.PackedScene;
-    	MarginContainer game = (MarginContainer) gui.Instance();
+		MarginContainer game = (MarginContainer) gui.Instance();
 		GetTree().GetRoot().AddChild(game);
 		Hide();
 	}

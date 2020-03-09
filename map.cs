@@ -7,18 +7,18 @@ public class map : Spatial
 	This is poorly named, but this is the root object for our gameplay
 	*/
 	
-    private PackedScene tankscene;
+	private PackedScene tankscene;
 	private KinematicBody localplayer;
 	private KinematicBody remoteplayer;
 	private Globals globals;
 	private AudioStreamPlayer3D hitsound;
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
 		globals = (Globals)GetNode("/root/Globals");
 		
-        // instantiate the players
+		// instantiate the players
 		tankscene = ResourceLoader.Load("res://Tank.tscn") as Godot.PackedScene;
 		
 		// load audio
@@ -60,7 +60,7 @@ public class map : Spatial
 		
 		// Notify the HUD that the tanks are available
 		EmitSignal("tanks_created");
-    }
+	}
 
 	private void newBullet(Node bullet)
 	{

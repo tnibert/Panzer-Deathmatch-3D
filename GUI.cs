@@ -3,11 +3,11 @@ using System;
 
 public class GUI : MarginContainer
 {
-    private Tween _tween;
+	private Tween _tween;
 	private TextureProgress _bar;
 	private Tank localPlayer;
 
-    /*
+	/*
 	Quick overview of signalling in Godot:
 	In signal dispatching class:
 		AddUserSignal("dec_local_health");  - establishes signal
@@ -16,17 +16,17 @@ public class GUI : MarginContainer
 		DispatchingClass.Connect("dec_local_health", this, nameof(MethodToCall));
 	*/
 	
-    public override void _Ready()
-    {
-        _bar = (TextureProgress) GetNode("HBoxContainer/Bars/Bar/Health/TextureProgress");
+	public override void _Ready()
+	{
+		_bar = (TextureProgress) GetNode("HBoxContainer/Bars/Bar/Health/TextureProgress");
 		
 		// _ready() is called for children before parent
 		localPlayer = (Tank) GetTree().GetRoot().FindNode(GetTree().GetNetworkUniqueId().ToString(), true, false);
-    	_bar.MaxValue = localPlayer.getMaxHealth();
+		_bar.MaxValue = localPlayer.getMaxHealth();
 		_bar.Value = _bar.MaxValue;
 		localPlayer.Connect("dec_local_health", this, nameof(DecrementBar));
 		localPlayer.Connect("respawn", this, nameof(ResetBar));
-    }
+	}
 
 	public void DecrementBar()
 	{
